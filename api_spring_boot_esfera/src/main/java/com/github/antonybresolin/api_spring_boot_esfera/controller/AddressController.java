@@ -26,6 +26,4 @@ public class AddressController {
     public List<Address> findAll() {
         return addressService.findAll();
     }
-
-
 }
