@@ -18,8 +18,8 @@ public class Contact {
     @Column (name = "contentContact", nullable = false)
     private String contentContact;
 
-    @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "id_client", nullable = false)
+    @ManyToOne
+    @JoinColumn(nullable = false)
     private Client client;
 
     public Contact() {
@@ -64,4 +64,6 @@ public class Contact {
     public void setClient(Client client) {
         this.client = client;
     }
+
+
 }

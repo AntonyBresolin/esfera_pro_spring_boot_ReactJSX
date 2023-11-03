@@ -33,4 +33,9 @@ public class ContactService {
     public List<Contact> findAll() {
         return contactRepository.findAll();
     }
+
+    public List<Contact> findByClientId(Long id) {
+        return contactRepository.findByClientId(id);
+    }
+
 }

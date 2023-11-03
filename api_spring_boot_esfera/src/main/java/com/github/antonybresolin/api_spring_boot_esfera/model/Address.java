@@ -2,6 +2,9 @@ package com.github.antonybresolin.api_spring_boot_esfera.model;
 
 import jakarta.persistence.*;
 
+import java.util.ArrayList;
+import java.util.List;
+
 @Entity
 @Table(name = "address")
 public class Address {
@@ -30,8 +33,10 @@ public class Address {
     @Column(name = "complement", nullable = false, length = 100)
     private String complement;
 
-    @OneToOne(fetch = FetchType.LAZY, mappedBy = "address")
+    @OneToOne
+    @JoinColumn(nullable = false, unique = true)
     private Client client;
+
 
 
     public Address() {
@@ -108,4 +113,5 @@ public class Address {
     public void setClient(Client client) {
         this.client = client;
     }
+
 }

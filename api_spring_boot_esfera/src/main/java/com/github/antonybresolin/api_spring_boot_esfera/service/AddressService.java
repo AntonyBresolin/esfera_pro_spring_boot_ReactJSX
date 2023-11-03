@@ -21,4 +21,12 @@ public class AddressService {
     public List<Address> findAll() {
         return addressRepository.findAll();
     }
+
+    public Address update(Address address) {
+        return addressRepository.save(address);
+    }
+
+    public void deleteById(Long id) {
+        addressRepository.deleteById(id);
+    }
 }
