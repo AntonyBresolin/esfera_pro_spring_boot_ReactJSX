@@ -12,18 +12,12 @@ public class Client {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @Column(name = "name", nullable = false, length = 100)
+    @Column(name = "name", nullable = true, length = 100)
     private String name;
 
-    @Column(name = "cnpj", nullable = false, length = 14)
+    @Column(name = "cnpj", nullable = true, length = 14)
     private String cnpj;
 
-    @OneToOne(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
-    @JoinColumn(name = "id_address", nullable = false)
-    private Address address;
-
-    @OneToMany(mappedBy = "client", fetch = FetchType.LAZY, cascade = CascadeType.ALL)
-    private List<Contact> contacts = new ArrayList<>();
 
     public Client() {
     }
@@ -52,19 +46,5 @@ public class Client {
         this.cnpj = cnpj;
     }
 
-    public Address getAddress() {
-        return address;
-    }
 
-    public void setAddress(Address address) {
-        this.address = address;
-    }
-
-    public List<Contact> getContacts() {
-        return contacts;
-    }
-
-    public void setContacts(List<Contact> contacts) {
-        this.contacts = contacts;
-    }
 }

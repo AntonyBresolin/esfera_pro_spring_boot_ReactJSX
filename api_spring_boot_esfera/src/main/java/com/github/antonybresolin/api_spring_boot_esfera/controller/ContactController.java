@@ -37,4 +37,9 @@ public class ContactController {
     public void deleteById(@PathVariable Long id) {
         contactService.deleteById(id);
     }
+
+    @GetMapping(value = "/client/{id}")
+    public List<Contact> findByClientId(@PathVariable Long id) {
+        return contactService.findByClientId(id);
+    }
 }

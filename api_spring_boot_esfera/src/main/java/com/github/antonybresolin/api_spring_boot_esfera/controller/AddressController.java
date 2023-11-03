@@ -26,4 +26,14 @@ public class AddressController {
     public List<Address> findAll() {
         return addressService.findAll();
     }
+
+    @PutMapping
+    public Address update(@RequestBody Address address) {
+        return addressService.update(address);
+    }
+
+    @DeleteMapping(value = "/{id}")
+    public void deleteById(@PathVariable(value = "id")Long id) {
+        addressService.deleteById(id);
+    }
 }
