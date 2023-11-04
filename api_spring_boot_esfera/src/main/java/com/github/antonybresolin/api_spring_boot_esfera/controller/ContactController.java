@@ -42,4 +42,6 @@ public class ContactController {
     public List<Contact> findByClientId(@PathVariable Long id) {
         return contactService.findByClientId(id);
     }
+
+
 }

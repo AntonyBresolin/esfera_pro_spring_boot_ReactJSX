@@ -31,4 +31,12 @@ public class ClientService {
     public List<Client> findAll() {
         return clientRepository.findAll();
     }
+
+    public List<Client> findByStatusActive() {
+        return clientRepository.findByStatus("Active");
+    }
+
+    public List<Client> findByStatusInactive() {
+        return clientRepository.findByStatus("Inactive");
+    }
 }

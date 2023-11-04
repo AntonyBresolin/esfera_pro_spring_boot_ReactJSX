@@ -1,6 +1,7 @@
 package com.github.antonybresolin.api_spring_boot_esfera.controller;
 
 import com.github.antonybresolin.api_spring_boot_esfera.model.Client;
+import com.github.antonybresolin.api_spring_boot_esfera.model.Contact;
 import com.github.antonybresolin.api_spring_boot_esfera.service.ClientService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
@@ -36,5 +37,15 @@ public class ClientController {
     @GetMapping
     public List<Client> findAll() {
         return clientService.findAll();
+    }
+
+    @GetMapping(value = "/status/active")
+    public List<Client> findByClientStatusActive() {
+        return clientService.findByStatusActive();
+    }
+
+    @GetMapping(value = "/status/inactive")
+    public List<Client> findByClientStatusInactive() {
+        return clientService.findByStatusInactive();
     }
 }

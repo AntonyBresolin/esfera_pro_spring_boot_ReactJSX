@@ -6,10 +6,10 @@ import { useState } from "react";
 import * as Dialog from '@radix-ui/react-dialog';
 
 export const Clients = () => {
-    const url = 'http://localhost:8080/clients/';
+    const url = 'http://localhost:8080/api/client/status/active';
     const initialClients = useLoaderData()
     const [client, setClient] = useState(initialClients);
-    const clientsActive = initialClients.filter(client => client.status === 'active');
+    const clientsActive = initialClients;
 
     const handleDesactiveUser = (id) => {
         desactiveUser(id, initialClients, url);

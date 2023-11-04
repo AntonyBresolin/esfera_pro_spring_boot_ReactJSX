@@ -18,6 +18,9 @@ public class Client {
     @Column(name = "cnpj", nullable = true, length = 14)
     private String cnpj;
 
+    @Column(name = "status", nullable = true, length = 14, columnDefinition = "varchar(10) default 'Active'")
+    private String status;
+
 
     public Client() {
     }
@@ -44,6 +47,14 @@ public class Client {
 
     public void setCnpj(String cnpj) {
         this.cnpj = cnpj;
+    }
+
+    public String getStatus() {
+        return status;
+    }
+
+    public void setStatus(String status) {
+        this.status = status;
     }
 
 
