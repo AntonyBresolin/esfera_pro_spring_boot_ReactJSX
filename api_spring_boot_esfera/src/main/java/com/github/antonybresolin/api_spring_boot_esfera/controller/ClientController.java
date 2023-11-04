@@ -48,4 +48,14 @@ public class ClientController {
     public List<Client> findByClientStatusInactive() {
         return clientService.findByStatusInactive();
     }
+
+    @PutMapping(value = "/{id}/status/active")
+    public Client updateClientStatusActive(@PathVariable(value = "id")Long id) {
+        return clientService.updateClientStatusActive(id);
+    }
+
+    @PutMapping(value = "/{id}/status/inactive")
+    public Client updateClientStatusInactive(@PathVariable(value = "id")Long id) {
+        return clientService.updateClientStatusInactive(id);
+    }
 }

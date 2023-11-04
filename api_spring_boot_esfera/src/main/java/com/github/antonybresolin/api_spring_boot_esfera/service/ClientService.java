@@ -39,4 +39,16 @@ public class ClientService {
     public List<Client> findByStatusInactive() {
         return clientRepository.findByStatus("Inactive");
     }
+
+    public Client updateClientStatusActive(Long id) {
+        Client client = clientRepository.findById(id).get();
+        client.setStatus("Active");
+        return clientRepository.save(client);
+    }
+
+    public Client updateClientStatusInactive(Long id) {
+        Client client = clientRepository.findById(id).get();
+        client.setStatus("Inactive");
+        return clientRepository.save(client);
+    }
 }
