@@ -1,20 +1,53 @@
 import { useLoaderData } from "react-router-dom";
 import { Menu }  from "../Layouts/Menu";
 import { Cross1Icon, Pencil1Icon, PlusIcon, TrashIcon } from "@radix-ui/react-icons";
-import { desactiveUser } from "../functions/desactiveUser";
-import { useState } from "react";
 import * as Dialog from '@radix-ui/react-dialog';
+import { updateStatusClient } from "../functions/clientsFunctions";
+import { useState } from "react";
 
+/* 
+client format:
+{
+  "name": "Antony",
+  "cnpj": "123456789"
+}
+address format:
+{
+  "cep": "69966996",
+  "state": "PR",
+  "city": "Toledo",
+  "neighborhood": "BPK",
+  "street": "Rua dos Bobos",
+  "number": "69",
+  "complement": "nothing",
+  "client": {
+      "id": 2,
+      "name": "Antony",
+      "cnpj": "123456789",
+      "status": "Active"
+  }
+}
+
+contact format:
+{
+  "name": "phone",
+  "type": 1,
+  "contentContact": "999999999",
+  "client": {
+      "id": 2,
+      "name": "Antony",
+      "cnpj": "123456789",
+      "status": "Active"
+  }
+}
+*/ 
 export const Clients = () => {
-    const url = 'http://localhost:8080/api/client/status/active';
     const initialClients = useLoaderData()
-    const [client, setClient] = useState(initialClients);
-    const clientsActive = initialClients;
-
-    const handleDesactiveUser = (id) => {
-        desactiveUser(id, initialClients, url);
-        const newClients = initialClients.filter(client => client.id !== id);
-        setClient(newClients);
+    const [Clients, setClients] = useState(initialClients)
+    const handleDeleteUser = (client) => {
+      updateStatusClient(client.id, client)
+      const newClients = Clients.filter((c) => c.id !== client.id)
+      setClients(newClients)
     }
 
     const handleAddUser = () => {
@@ -44,7 +77,7 @@ export const Clients = () => {
                     CPF/CNPJ
                   </div>
                 </div>
-            {clientsActive.map(client => (
+            {Clients.map(client => (
                 <div key={client.id} className="border-y grid grid-cols-9 items-center p-3 pl-6">
                   <div className="flex items-center gap-8 text-lg col-span-2">
                     <input type="checkbox"/>
@@ -61,7 +94,7 @@ export const Clients = () => {
                   </div>
                   <div className="flex justify-evenly">
                     <div className="rounded-full bg-gray-200 p-2 cursor-pointer hover:text-amber hover:bg-purple-contrast hover:scale-110 transition ease-in-out duration-200" >
-                      <TrashIcon onClick={() => handleDesactiveUser(client.id)} className="h-4 w-4 block" />
+                      <TrashIcon onClick={() => {handleDeleteUser(client)}} className="h-4 w-4 block" />
                     </div>
                     <Dialog.Root>
                       <Dialog.Trigger onClick={() => handleEditUser()} className="rounded-full bg-gray-200 p-2 cursor-pointer hover:text-amber hover:bg-purple-contrast hover:scale-110 transition ease-in-out duration-200">
@@ -71,7 +104,7 @@ export const Clients = () => {
                       <Dialog.Portal>
                         <Dialog.Overlay className="fixed inset-0 bg-black/50"/>
                         <Dialog.Content className="fixed top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 rounded-lg bg-white
-                      text-white shadow w-full max-w-lg overflow-hidden">
+                      text-white shadow w-full max-w-2xl overflow-hidden">
 
                             <div className="flex items-center justify-between p-6 bg-purple-contrast">
                               <Dialog.Title
@@ -81,7 +114,6 @@ export const Clients = () => {
                                 <Cross1Icon className="w-6 h-6 hover:text-amber"/>
                               </Dialog.Close>
                             </div>
-
                             <ClientsFields client={client}/>
 
                             <div className="text-right mr-2">
@@ -100,17 +132,36 @@ export const Clients = () => {
                 </div>
             ))}
             <Dialog.Root>
-            <Dialog.Trigger onClick={() => handleAddUser()} className="absolute cursor-pointer bottom-7 right-10 rounded-xl text-white bg-purple-highlight p-2 hover:scale-110 transition ease-in-out duration-200">
+            <Dialog.Trigger onClick={() => handleAddUser()} className="fixed cursor-pointer bottom-7 right-10 rounded-xl text-white bg-purple-highlight p-2 hover:scale-110 transition ease-in-out duration-200">
               <PlusIcon className=" w-8 h-8 hover:text-amber" />
             </Dialog.Trigger>
 
             <Dialog.Portal>
-              <Dialog.Overlay className="fixed inset-0 bg-black/50"/>
-              <Dialog.Content className="fixed top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 rounded-md bg-purple-contrast
-            text-white p-8 shadow w-full max-w-lg">
-                  <h2>Cadastrar cliente</h2>
-              </Dialog.Content>
-            </Dialog.Portal>
+                        <Dialog.Overlay className="fixed inset-0 bg-black/50"/>
+                        <Dialog.Content className="fixed top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 rounded-lg bg-white
+                      text-white shadow w-full max-w-2xl overflow-hidden">
+
+                            <div className="flex items-center justify-between p-6 bg-purple-contrast">
+                              <Dialog.Title
+                               className="text-xl font-semibold">Cadastrar cliente
+                              </Dialog.Title>
+                              <Dialog.Close>
+                                <Cross1Icon className="w-6 h-6 hover:text-amber"/>
+                              </Dialog.Close>
+                            </div>
+                            <ClientsFields client={''}/>
+
+                            <div className="text-right mr-2">
+                              <Dialog.Close className="px-6 py-2 mt-6 mb-4 mr-4 border-2 border-black rounded-lg text-lg text-gray-600 hover:text-black transition ease-in-out duration-200">
+                                Cancelar
+                              </Dialog.Close>
+                              <button className="bg-purple-highlight px-9 py-2 mt-6 mb-4 mr-4 border-2 border-purple-highlight rounded-lg text-lg font-semibold hover:text-amber transition ease-in-out duration-200">
+                                Save
+                              </button>
+                            </div>
+
+                        </Dialog.Content>
+                      </Dialog.Portal>
             </Dialog.Root>
             </div>
         </div>
@@ -119,42 +170,137 @@ export const Clients = () => {
 
 
 function ClientsFields ({client}) {
-  console.log(client);
   return (
     <div className="space-y-6 bg-white p-6">
-      <div>
-        <label className="text-gray-900 font-medium">Nome</label>
-        <input 
-        autoFocus
-        className="text-gray-600 mt-2 py-1.5 px-2 block w-full rounded-md border border-gray-300 shadow focus:border-purple-contrast focus:text-gray-800"
-        type="text"
-        defaultValue={client.name !== undefined ? client.name : ''}
-        />
+
+      <h1 className="text-black text-xl font-semibold">Dados básicos</h1>
+      <div className="flex justify-evenly">
+        <div className="w-full">
+          <label className="text-gray-900 font-medium">Nome</label>
+          <input 
+          autoFocus
+          className="text-gray-600 mt-2 py-1.5 px-2 block w-11/12 rounded-md border border-gray-300 shadow focus:border-purple-contrast focus:text-gray-800"
+          type="text"
+          defaultValue={client.name}
+          />
+        </div>
+        <div className="w-full">
+          <label className="text-gray-900 font-medium">CPF/CNPJ</label>
+          <input
+          className="text-gray-600 mt-2 py-1.5 px-2 block w-11/12 rounded-md border border-gray-300 shadow focus:border-purple-contrast focus:text-gray-800"
+          type="text"
+          defaultValue={client.cnpj}
+          />
+        </div>
       </div>
-      <div>
-        <label className="text-gray-900 font-medium">Endereço</label>
-        <input 
-        className="text-gray-600 mt-2 py-1.5 px-2 block w-full rounded-md border border-gray-300 shadow focus:border-purple-contrast focus:text-gray-800"
-        type="text"
-        defaultValue={client.address !== undefined ? client.address : ''}
-        />
+
+      <h1 className="text-black text-xl font-semibold">Informações para contato</h1>
+      <div className="flex justify-evenly">
+        <div className="w-full">
+          <label className="text-gray-900 font-medium">Celular</label>
+          <input 
+          autoFocus
+          className="text-gray-600 mt-2 py-1.5 px-2 block w-11/12 rounded-md border border-gray-300 shadow focus:border-purple-contrast focus:text-gray-800"
+          type="text"
+          // defaultValue={}
+          />
+        </div>
+        <div className="w-full">
+          <label className="text-gray-900 font-medium">E-mail</label>
+          <input
+          className="text-gray-600 mt-2 py-1.5 px-2 block w-11/12 rounded-md border border-gray-300 shadow focus:border-purple-contrast focus:text-gray-800"
+          type="text"
+          // defaultValue={}
+          />
+        </div>
       </div>
-      <div>
-        <label className="text-gray-900 font-medium">Contato</label>
-        <input 
-        className="text-gray-600 mt-2 py-1.5 px-2 block w-full rounded-md border border-gray-300 shadow focus:border-purple-contrast focus:text-gray-800"
-        type="text"
-        defaultValue={client.contact !== undefined ? client.contact : ''}
-        />
+
+      <h1 className="text-black text-xl font-semibold">Endereço</h1>
+      <div className="flex flex-col">
+        <div className="flex">
+          <div className="w-2/6">
+            <label className="text-gray-900 font-medium">CEP</label>
+            <input 
+            autoFocus
+            className="w-5/6 text-gray-600 mt-2 py-1.5 px-2 block rounded-md border border-gray-300 shadow focus:border-purple-contrast focus:text-gray-800"
+            type="text"
+            // defaultValue={}
+            />
+          </div>
+          <div className="w-2/6">
+            <label className="text-gray-900 font-medium">Cidade</label>
+            <input 
+            autoFocus
+            className="w-5/6 text-gray-600 mt-2 py-1.5 px-2 block rounded-md border border-gray-300 shadow focus:border-purple-contrast focus:text-gray-800"
+            type="text"
+            // defaultValue={}
+            />
+          </div>
+          <div className="w-2/6">
+            <label className="text-gray-900 font-medium">Estado</label>
+            <select className="w-5/6 text-gray-600 mt-2 py-1.5 px-2 block rounded-md border border-gray-300 shadow" required>
+              <option value="" disabled selected>Selecione o estado</option>
+              <option value="AC">Acre</option>
+              <option value="AL">Alagoas</option>
+              <option value="AP">Amapá</option>
+              <option value="AM">Amazonas</option>
+              <option value="BA">Bahia</option>
+              <option value="CE">Ceará</option>
+              <option value="DF">Distrito Federal</option>
+              <option value="ES">Espírito Santo</option>
+              <option value="GO">Goiás</option>
+              <option value="MA">Maranhão</option>
+              <option value="MT">Mato Grosso</option>
+              <option value="MS">Mato Grosso do Sul</option>
+              <option value="MG">Minas Gerais</option>
+              <option value="PA">Pará</option>
+              <option value="PB">Paraíba</option>
+              <option value="PR">Paraná</option>
+              <option value="PE">Pernambuco</option>
+              <option value="PI">Piauí</option>
+              <option value="RJ">Rio de Janeiro</option>
+              <option value="RN">Rio Grande do Norte</option>
+              <option value="RS">Rio Grande do Sul</option>
+              <option value="RO">Rondônia</option>
+              <option value="RR">Roraima</option>
+              <option value="SC">Santa Catarina</option>
+              <option value="SP">São Paulo</option>
+              <option value="SE">Sergipe</option>
+              <option value="TO">Tocantins</option>
+          </select>
+          </div>
+        </div>
+        <div className="flex">
+          <div className="w-2/6 mt-4">
+            <label className="text-gray-900 font-medium">Bairro</label>
+            <input 
+            autoFocus
+            className="w-5/6 text-gray-600 mt-2 py-1.5 px-2 block rounded-md border border-gray-300 shadow focus:border-purple-contrast focus:text-gray-800"
+            type="text"
+            // defaultValue={}
+            />
+          </div>
+          <div className="w-2/6 mt-4">
+            <label className="text-gray-900 font-medium">Rua</label>
+            <input 
+            autoFocus
+            className="w-5/6 text-gray-600 mt-2 py-1.5 px-2 block rounded-md border border-gray-300 shadow focus:border-purple-contrast focus:text-gray-800"
+            type="text"
+            // defaultValue={}
+            />
+          </div>
+          <div className="w-2/6 mt-4">
+            <label className="text-gray-900 font-medium">Número</label>
+            <input 
+            autoFocus
+            className="w-5/6 text-gray-600 mt-2 py-1.5 px-2 block rounded-md border border-gray-300 shadow focus:border-purple-contrast focus:text-gray-800"
+            type="text"
+            // defaultValue={}
+            />
+          </div>
+        </div>
       </div>
-      <div>
-        <label className="text-gray-900 font-medium">CPF/CNPJ</label>
-        <input 
-        className="text-gray-600 mt-2 py-1.5 px-2 block w-full rounded-md border border-gray-300 shadow focus:border-purple-contrast focus:text-gray-800"
-        type="text"
-        defaultValue={client.cnpj !== undefined ? client.cnpj : ''}
-        />
-      </div>
+
     </div>
   )
 }

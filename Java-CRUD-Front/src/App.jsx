@@ -6,7 +6,7 @@ import {
 } from "react-router-dom";
 
 // functions
-import { clientsLoader } from "./Functions/clientsLoader";
+import { clientsLoader } from "./functions/clientsFunctions";
 
 // layouts
 import { DashBoardLayout } from "./Layouts/DashBoardLayout";
