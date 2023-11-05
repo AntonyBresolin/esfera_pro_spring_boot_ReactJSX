@@ -3,7 +3,7 @@
 ## Desenvolvimento do projeto esfera pró soluções.
 
 ### Desenvolvimento em:
-- TypeScript
+- JavaScript
 - Spring Boot Java Web
 - MySQL
 - React Native
