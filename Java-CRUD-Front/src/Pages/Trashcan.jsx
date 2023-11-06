@@ -1,8 +1,10 @@
+import { useState } from "react";
 import { useLoaderData } from "react-router-dom";
+
+import { ReloadIcon, TrashIcon } from "@radix-ui/react-icons";
+
 import { Menu } from "../Layouts/Menu";
 import { clientDelete, updateStatusClient } from "../functions/clientsFunctions";
-import { useState } from "react";
-import { ReloadIcon, TrashIcon } from "@radix-ui/react-icons";
 
 export const Trashcan = () => {
     const initialClients = useLoaderData()
@@ -15,7 +17,6 @@ export const Trashcan = () => {
     }
 
     const handleDeleteClient = (client) => {
-        console.log(client.id)
         clientDelete(client.id)
         const newClients = Clients.filter((c) => c.id !== client.id)
         setClients(newClients)

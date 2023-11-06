@@ -1,9 +1,11 @@
+import { useState } from "react";
 import { useLoaderData } from "react-router-dom";
-import { Menu }  from "../Layouts/Menu";
+
 import { Cross1Icon, Pencil1Icon, PlusIcon, TrashIcon } from "@radix-ui/react-icons";
 import * as Dialog from '@radix-ui/react-dialog';
+
 import { clientCreate, clientUpdate, updateStatusClient } from "../functions/clientsFunctions";
-import { useState } from "react";
+import { Menu }  from "../Layouts/Menu";
 
 /* 
 client format:
@@ -122,7 +124,7 @@ export const Clients = () => {
             </div>
           ))}
 
-          <section key={'Edit Dialog'}>
+          {/* Dialog de Edit */}
             <Dialog.Root open={openE} onOpenChange={setOpenE}>
               <Dialog.Portal>
                 <Dialog.Overlay className="fixed inset-0 bg-black/50 data-[state=open]:animate-[overlay-show_200ms] data-[state=closed]:animate-[overlay-hide_200ms]"/>
@@ -152,9 +154,8 @@ export const Clients = () => {
                 </Dialog.Content>
               </Dialog.Portal>
             </Dialog.Root>
-          </section>
-
-          <section key={'Create Dialog'}>
+          
+              {/* Dialog de criação */}
             <Dialog.Root open={openC} onOpenChange={setOpenC}>
               <Dialog.Trigger title="Adicionar Cliente" className="fixed cursor-pointer bottom-7 right-10 rounded-xl text-white bg-purple-highlight p-2 hover:scale-110 transition ease-in-out duration-200">
                 <PlusIcon className=" w-8 h-8 hover:text-amber" />
@@ -188,7 +189,6 @@ export const Clients = () => {
                 </Dialog.Content>
               </Dialog.Portal>
             </Dialog.Root>
-          </section>
         </div>
       </div>
   );
