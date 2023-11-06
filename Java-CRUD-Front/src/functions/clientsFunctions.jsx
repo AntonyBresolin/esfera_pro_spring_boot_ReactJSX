@@ -1,4 +1,4 @@
-export const clientsLoader = async () => {
+export const clientsActiveLoader = async () => {
     const res = await fetch('http://localhost:8080/api/client/status/active')
 
   if (!res.ok) {
@@ -8,6 +8,18 @@ export const clientsLoader = async () => {
   return res.json()
 
 }
+
+export const clientsInactiveLoader = async () => {
+  const res = await fetch('http://localhost:8080/api/client/status/inactive')
+
+  if (!res.ok) {
+    throw Error('Could not fetch the list of clients')
+  }
+
+  return res.json()
+
+}
+
 
 export const clientCreate = async (data, clients) => {
   const id =clients.length + 1
@@ -72,11 +84,9 @@ export const clientCreate = async (data, clients) => {
     throw Error('Could not create the contact')
   }
 
-  return clientsLoader()
+  return clientsActiveLoader()
 
 }
-
-
 
 // Necessario atualizar a api para saber como sera feito:
 export const clientUpdate = async (data, clients) => {
@@ -138,6 +148,8 @@ export const clientUpdate = async (data, clients) => {
 
 }
 
+
+
 export const updateStatusClient = async (id, client) => {
   const upd = await fetch(`http://localhost:8080/api/client/${id}/status/${client.status === "Active" ? "inactive" : "active"}`, {
     method: 'PUT',
@@ -150,7 +162,6 @@ export const updateStatusClient = async (id, client) => {
   if (!upd.ok) {
     throw Error('Could not update the status of the client')
   }
-
   return upd.json()
 
 }

@@ -111,10 +111,10 @@ export const Clients = () => {
                 {eachClient.cnpj}
               </div>
               <div className="flex justify-evenly">
-                <div className="rounded-full bg-gray-200 p-2 cursor-pointer hover:text-amber hover:bg-purple-contrast hover:scale-110 transition ease-in-out duration-200" >
+                <div title="Deletar Cliente" className="rounded-full bg-gray-200 p-2 cursor-pointer hover:text-amber hover:bg-purple-contrast hover:scale-110 transition ease-in-out duration-200" >
                   <TrashIcon onClick={() => {handleDeleteClient(eachClient)}} className="h-4 w-4 block" />
                 </div>
-                <div className="rounded-full bg-gray-200 p-2 cursor-pointer hover:text-amber hover:bg-purple-contrast hover:scale-110 transition ease-in-out duration-200">
+                <div title="Editar Cliente(W.I.P)" className="rounded-full bg-gray-200 p-2 cursor-pointer hover:text-amber hover:bg-purple-contrast hover:scale-110 transition ease-in-out duration-200">
                   <Pencil1Icon onClick={() => {handleEditClient(eachClient)}} className="h-4 w-4 block" />
                 </div>
 
@@ -156,7 +156,7 @@ export const Clients = () => {
 
           <section key={'Create Dialog'}>
             <Dialog.Root open={openC} onOpenChange={setOpenC}>
-              <Dialog.Trigger className="fixed cursor-pointer bottom-7 right-10 rounded-xl text-white bg-purple-highlight p-2 hover:scale-110 transition ease-in-out duration-200">
+              <Dialog.Trigger title="Adicionar Cliente" className="fixed cursor-pointer bottom-7 right-10 rounded-xl text-white bg-purple-highlight p-2 hover:scale-110 transition ease-in-out duration-200">
                 <PlusIcon className=" w-8 h-8 hover:text-amber" />
               </Dialog.Trigger>
     
