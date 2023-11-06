@@ -113,11 +113,11 @@ export const Clients = () => {
                 {eachClient.cnpj}
               </div>
               <div className="flex justify-evenly">
-                <div title="Remover Cliente" className="rounded-full bg-gray-200 p-2 cursor-pointer hover:text-amber hover:bg-purple-contrast hover:scale-110 transition ease-in-out duration-200" >
-                  <TrashIcon onClick={() => {handleDeleteClient(eachClient)}} className="h-4 w-4 block" />
+                <div title="Remover Cliente" onClick={() => {handleDeleteClient(eachClient)}} className="rounded-full bg-gray-200 p-2 cursor-pointer hover:text-amber hover:bg-purple-contrast hover:scale-110 transition ease-in-out duration-200" >
+                  <TrashIcon className="h-4 w-4 block" />
                 </div>
-                <div title="Editar Cliente(W.I.P)" className="rounded-full bg-gray-200 p-2 cursor-pointer hover:text-amber hover:bg-purple-contrast hover:scale-110 transition ease-in-out duration-200">
-                  <Pencil1Icon onClick={() => {handleEditClient(eachClient)}} className="h-4 w-4 block" />
+                <div title="Editar Cliente(W.I.P)" onClick={() => {handleEditClient(eachClient)}} className="rounded-full bg-gray-200 p-2 cursor-pointer hover:text-amber hover:bg-purple-contrast hover:scale-110 transition ease-in-out duration-200">
+                  <Pencil1Icon className="h-4 w-4 block" />
                 </div>
 
               </div>
