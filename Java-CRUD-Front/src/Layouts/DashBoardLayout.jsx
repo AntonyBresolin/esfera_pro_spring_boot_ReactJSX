@@ -1,14 +1,10 @@
-import { HamburgerMenuIcon } from "@radix-ui/react-icons";
 import { Outlet, ScrollRestoration } from "react-router-dom";
 
 export const DashBoardLayout = () => {
     return ( 
         <div>
             <ScrollRestoration />
-            <header className="flex justify-between m-2">
-                <div className="cursor-pointer p-2 max-w-min">
-                    <HamburgerMenuIcon className= "h-6 w-6" />
-                </div>
+            <header className="flex justify-end m-2">
                 <div className="flex flex-row">
                     <div className="w-14 font-body">
                         <h4 className="font-semibold">User</h4>

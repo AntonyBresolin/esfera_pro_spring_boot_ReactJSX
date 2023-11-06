@@ -44,18 +44,29 @@ contact format:
 export const Clients = () => {
     const initialClients = useLoaderData()
     const [Clients, setClients] = useState(initialClients)
-    const [open, setOpen] = useState(false)
+    const [openC, setOpenC] = useState(false)
+    const [openE, setOpenE] = useState(false)
+    const [client, setClient] = useState({})
 
-    const handleDeleteUser = (client) => {
+    const handleDeleteClient = (client) => {
       updateStatusClient(client.id, client)
       const newClients = Clients.filter((c) => c.id !== client.id)
       setClients(newClients)
+    }
+
+    const handleEditClient = (toEdit) => {
+      setClient(toEdit)
+      setOpenE(true)
     }
 
     const handleSubmitEdit = (e) => {
       e.preventDefault()
       let data = Object.fromEntries(new FormData(e.target))
       console.log(data)
+      // const res = ""
+      // const newClients = ""
+      // setClients(newClients)
+      setOpenE(false)
     }
     const handleSubmitCreate = async (e) => {
       e.preventDefault()
@@ -64,14 +75,13 @@ export const Clients = () => {
       const res = await clientCreate(data, Clients)
       const newClients = res
       setClients(newClients)
-      console.log(open)
-      setOpen(false)
+      setOpenC(false)
     }
 
     return ( 
       <div className="flex flex-row w-full font-body">
         <Menu />
-        <div className="w-full h-full">
+        <div className="w-full h-full pb-44">
         <div className="border-y grid grid-cols-9  items-center p-3 pl-6 bg-gray-100 text-gray-600">
               <div className="flex items-center gap-8 text-lg col-span-2">
                 <input type="checkbox"/>
@@ -87,98 +97,100 @@ export const Clients = () => {
                 CPF/CNPJ
               </div>
             </div>
-        {Clients.map(client => (
-            <div key={client.id} className="border-y grid grid-cols-9 items-center p-3 pl-6">
-            <div className="flex items-center gap-8 text-lg col-span-2">
-              <input type="checkbox"/>
-              {client.name}
-            </div>
-            <div className="col-span-2">
-              {client.address}
-            </div>
-            <div className="col-span-2">
-              {client.contact}
-            </div>
-            <div className="col-span-2">
-              {client.cnpj}
-            </div>
-            <div className="flex justify-evenly">
-              <div className="rounded-full bg-gray-200 p-2 cursor-pointer hover:text-amber hover:bg-purple-contrast hover:scale-110 transition ease-in-out duration-200" >
-                <TrashIcon onClick={() => {handleDeleteUser(client)}} className="h-4 w-4 block" />
+          {Clients.map(eachClient => (
+              <div key={eachClient.id} className="border-y grid grid-cols-9 items-center p-3 pl-6">
+              <div className="flex items-center gap-8 text-lg col-span-2">
+                <input type="checkbox"/>
+                {eachClient.name}
               </div>
-              <Dialog.Root open={open} onOpenChange={setOpen}>
-                <Dialog.Trigger className="rounded-full bg-gray-200 p-2 cursor-pointer hover:text-amber hover:bg-purple-contrast hover:scale-110 transition ease-in-out duration-200">
-                  <Pencil1Icon className="h-4 w-4 block" />
-                </Dialog.Trigger>
-      
-                <Dialog.Portal>
-                  <Dialog.Overlay className="fixed inset-0 bg-black/50"/>
-                  <Dialog.Content className="fixed top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 rounded-lg bg-white
-                text-white shadow w-full max-w-2xl overflow-hidden">
-      
-                      <div className="flex items-center justify-between p-6 bg-purple-contrast">
-                        <Dialog.Title
-                          className="text-xl font-semibold">Editar cliente
-                        </Dialog.Title>
-                        <Dialog.Close>
-                          <Cross1Icon className="w-6 h-6 hover:text-amber"/>
-                        </Dialog.Close>
-                      </div>
-
-
-                      <form onSubmit={handleSubmitEdit}>
-                        <ClientsFields client={client}/>
-                        <div className="text-right mr-2">
-                          <Dialog.Close className="px-6 py-2 mt-6 mb-4 mr-4 border-2 border-black rounded-lg text-lg text-gray-600 hover:text-black transition ease-in-out duration-200">
-                            Cancelar
-                          </Dialog.Close>
-                          <button className="bg-purple-highlight px-9 py-2 mt-6 mb-4 mr-4 border-2 border-purple-highlight rounded-lg text-lg font-semibold hover:text-amber transition ease-in-out duration-200">
-                            Save
-                          </button>
-                        </div>
-                      </form>
-      
-                  </Dialog.Content>
-                </Dialog.Portal>
-              </Dialog.Root>
-            </div>
-          </div>
-        ))}
-        <Dialog.Root open={open} onOpenChange={setOpen}>
-          <Dialog.Trigger className="fixed cursor-pointer bottom-7 right-10 rounded-xl text-white bg-purple-highlight p-2 hover:scale-110 transition ease-in-out duration-200">
-            <PlusIcon className=" w-8 h-8 hover:text-amber" />
-          </Dialog.Trigger>
-
-          <Dialog.Portal>
-            <Dialog.Overlay className="fixed inset-0 bg-black/50"/>
-            <Dialog.Content className="fixed top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 rounded-lg bg-white
-          text-white shadow w-full max-w-2xl overflow-hidden">
-
-                <div className="flex items-center justify-between p-6 bg-purple-contrast">
-                  <Dialog.Title
-                    className="text-xl font-semibold">Cadastrar cliente
-                  </Dialog.Title>
-                  <Dialog.Close>
-                    <Cross1Icon className="w-6 h-6 hover:text-amber"/>
-                  </Dialog.Close>
+              <div className="col-span-2">
+                {eachClient.address}
+              </div>
+              <div className="col-span-2">
+                {eachClient.contact}
+              </div>
+              <div className="col-span-2">
+                {eachClient.cnpj}
+              </div>
+              <div className="flex justify-evenly">
+                <div className="rounded-full bg-gray-200 p-2 cursor-pointer hover:text-amber hover:bg-purple-contrast hover:scale-110 transition ease-in-out duration-200" >
+                  <TrashIcon onClick={() => {handleDeleteClient(eachClient)}} className="h-4 w-4 block" />
+                </div>
+                <div className="rounded-full bg-gray-200 p-2 cursor-pointer hover:text-amber hover:bg-purple-contrast hover:scale-110 transition ease-in-out duration-200">
+                  <Pencil1Icon onClick={() => {handleEditClient(eachClient)}} className="h-4 w-4 block" />
                 </div>
 
+              </div>
+            </div>
+          ))}
 
-                <form onSubmit={handleSubmitCreate}>
-                  <ClientsFields client={''}/>
-                  <div className="text-right mr-2">
-                    <Dialog.Close className="px-6 py-2 mt-6 mb-4 mr-4 border-2 border-black rounded-lg text-lg text-gray-600 hover:text-black transition ease-in-out duration-200">
-                      Cancelar
+        <section key={'Edit Dialog'}>
+                  <Dialog.Root open={openE} onOpenChange={setOpenE}>
+                    <Dialog.Portal>
+                      <Dialog.Overlay className="fixed inset-0 bg-black/50 data-[state=open]:animate-[overlay-show_200ms] data-[state=closed]:animate-[overlay-hide_200ms]"/>
+                      <Dialog.Content className="fixed top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 rounded-lg bg-white
+                    text-white shadow w-full max-w-2xl overflow-hidden data-[state=open]:animate-[dialog-show_200ms] data-[state=closed]:animate-[dialog-hide_200ms] ">
+          
+                          <div className="flex items-center justify-between p-6 bg-purple-contrast">
+                            <Dialog.Title
+                              className="text-xl font-semibold">Editar cliente
+                            </Dialog.Title>
+                            <Dialog.Close>
+                              <Cross1Icon className="w-6 h-6 hover:text-amber"/>
+                            </Dialog.Close>
+                          </div>
+  
+                          <form onSubmit={handleSubmitEdit}>
+                            <ClientsFields client={client}/>
+                            <div className="text-right mr-2">
+                              <Dialog.Close className="px-6 py-2 mt-6 mb-4 mr-4 border-2 border-black rounded-lg text-lg text-gray-600 hover:text-black transition ease-in-out duration-200">
+                                Cancelar
+                              </Dialog.Close>
+                              <button className="bg-purple-highlight px-9 py-2 mt-6 mb-4 mr-4 border-2 border-purple-highlight rounded-lg text-lg font-semibold hover:text-amber transition ease-in-out duration-200">
+                                Save
+                              </button>
+                            </div>
+                          </form>
+                      </Dialog.Content>
+                    </Dialog.Portal>
+                  </Dialog.Root>
+        </section>
+
+        <section key={'Create Dialog'}>
+          <Dialog.Root open={openC} onOpenChange={setOpenC}>
+            <Dialog.Trigger className="fixed cursor-pointer bottom-7 right-10 rounded-xl text-white bg-purple-highlight p-2 hover:scale-110 transition ease-in-out duration-200">
+              <PlusIcon className=" w-8 h-8 hover:text-amber" />
+            </Dialog.Trigger>
+  
+            <Dialog.Portal>
+              <Dialog.Overlay className="fixed inset-0 bg-black/50"/>
+              <Dialog.Content className="fixed top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 rounded-lg bg-white
+            text-white shadow w-full max-w-2xl overflow-hidden">
+  
+                  <div className="flex items-center justify-between p-6 bg-purple-contrast">
+                    <Dialog.Title
+                      className="text-xl font-semibold">Cadastrar cliente
+                    </Dialog.Title>
+                    <Dialog.Close>
+                      <Cross1Icon className="w-6 h-6 hover:text-amber"/>
                     </Dialog.Close>
-                    <button className="bg-purple-highlight px-9 py-2 mt-6 mb-4 mr-4 border-2 border-purple-highlight rounded-lg text-lg font-semibold hover:text-amber transition ease-in-out duration-200">
-                      Save
-                    </button>
                   </div>
-                </form>
-
-            </Dialog.Content>
-          </Dialog.Portal>
-        </Dialog.Root>
+  
+                  <form onSubmit={handleSubmitCreate}>
+                    <ClientsFields client={client}/>
+                    <div className="text-right mr-2">
+                      <Dialog.Close className="px-6 py-2 mt-6 mb-4 mr-4 border-2 border-black rounded-lg text-lg text-gray-600 hover:text-black transition ease-in-out duration-200">
+                        Cancelar
+                      </Dialog.Close>
+                      <button className="bg-purple-highlight px-9 py-2 mt-6 mb-4 mr-4 border-2 border-purple-highlight rounded-lg text-lg font-semibold hover:text-amber transition ease-in-out duration-200">
+                        Save
+                      </button>
+                    </div>
+                  </form>
+              </Dialog.Content>
+            </Dialog.Portal>
+          </Dialog.Root>
+        </section>
         </div>
       </div>
   );
