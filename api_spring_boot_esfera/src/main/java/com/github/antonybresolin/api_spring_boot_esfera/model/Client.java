@@ -18,12 +18,13 @@ public class Client {
     @Column(name = "cnpj", nullable = true, length = 14)
     private String cnpj;
 
-    @Column(name = "status", nullable = true, length = 14, columnDefinition = "varchar(10) default 'Active'")
+    @Column(name = "status", nullable = true, length = 14)
     private String status;
 
-
     public Client() {
+        this.status = "Active";
     }
+    
 
     public Long getId() {
         return id;
