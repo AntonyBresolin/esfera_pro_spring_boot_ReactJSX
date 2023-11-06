@@ -6,7 +6,7 @@ import {
 } from "react-router-dom";
 
 // functions
-import { clientsLoader } from "./functions/clientsFunctions";
+import { clientsActiveLoader, clientsInactiveLoader } from "./functions/clientsFunctions";
 
 // layouts
 import { DashBoardLayout } from "./Layouts/DashBoardLayout";
@@ -21,8 +21,8 @@ const router = createBrowserRouter(
     <Route path="/" element={<DashBoardLayout />}>
       <Route path="/" element={<DashBoard />} />
       <Route path="dashboard" element={<DashBoard />} />
-      <Route path="clients" element={<Clients />} loader={clientsLoader}/>
-      <Route path="trashcan" element={<Trashcan />} />
+      <Route path="clients" element={<Clients />} loader={clientsActiveLoader}/>
+      <Route path="trashcan" element={<Trashcan />} loader={clientsInactiveLoader} />
     
     </Route>
 ));
