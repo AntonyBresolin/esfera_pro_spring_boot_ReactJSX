@@ -2,13 +2,13 @@ import { useLoaderData } from "react-router-dom";
 import { Menu }  from "../Layouts/Menu";
 import { Cross1Icon, Pencil1Icon, PlusIcon, TrashIcon } from "@radix-ui/react-icons";
 import * as Dialog from '@radix-ui/react-dialog';
-import { updateStatusClient } from "../functions/clientsFunctions";
+import { clientCreate, updateStatusClient } from "../functions/clientsFunctions";
 import { useState } from "react";
 
 /* 
 client format:
 {
-  "name": "Antony",
+  "name": "Lucas",
   "cnpj": "123456789"
 }
 address format:
@@ -21,8 +21,8 @@ address format:
   "number": "69",
   "complement": "nothing",
   "client": {
-      "id": 2,
-      "name": "Antony",
+      "id": 1,
+      "name": "Lucas",
       "cnpj": "123456789",
       "status": "Active"
   }
@@ -34,8 +34,8 @@ contact format:
   "type": 1,
   "contentContact": "999999999",
   "client": {
-      "id": 2,
-      "name": "Antony",
+      "id": 1,
+      "name": "Lucas",
       "cnpj": "123456789",
       "status": "Active"
   }
@@ -44,129 +44,146 @@ contact format:
 export const Clients = () => {
     const initialClients = useLoaderData()
     const [Clients, setClients] = useState(initialClients)
+    const [open, setOpen] = useState(false)
+
     const handleDeleteUser = (client) => {
       updateStatusClient(client.id, client)
       const newClients = Clients.filter((c) => c.id !== client.id)
       setClients(newClients)
     }
 
-    const handleAddUser = () => {
-        console.log('add user');
+    const handleSubmitEdit = (e) => {
+      e.preventDefault()
+      let data = Object.fromEntries(new FormData(e.target))
+      console.log(data)
     }
-
-    const handleEditUser = () => {
-        console.log('edit user');
+    const handleSubmitCreate = async (e) => {
+      e.preventDefault()
+      let data = Object.fromEntries(new FormData(e.target))
+      console.log(data)
+      const res = await clientCreate(data, Clients)
+      const newClients = res
+      setClients(newClients)
+      console.log(open)
+      setOpen(false)
     }
 
     return ( 
-        <div className="flex flex-row w-full font-body">
-            <Menu />
-            <div className="w-full h-full">
-            <div className="border-y grid grid-cols-9  items-center p-3 pl-6 bg-gray-100 text-gray-600">
-                  <div className="flex items-center gap-8 text-lg col-span-2">
-                    <input type="checkbox"/>
-                    Nome
-                  </div>
-                  <div className="col-span-2">
-                    Endereço
-                  </div>
-                  <div className="col-span-2">
-                    Contato
-                  </div>
-                  <div className="col-span-2">
-                    CPF/CNPJ
-                  </div>
-                </div>
-            {Clients.map(client => (
-                <div key={client.id} className="border-y grid grid-cols-9 items-center p-3 pl-6">
-                  <div className="flex items-center gap-8 text-lg col-span-2">
-                    <input type="checkbox"/>
-                    {client.name}
-                  </div>
-                  <div className="col-span-2">
-                    {client.address}
-                  </div>
-                  <div className="col-span-2">
-                    {client.contact}
-                  </div>
-                  <div className="col-span-2">
-                    {client.cnpj}
-                  </div>
-                  <div className="flex justify-evenly">
-                    <div className="rounded-full bg-gray-200 p-2 cursor-pointer hover:text-amber hover:bg-purple-contrast hover:scale-110 transition ease-in-out duration-200" >
-                      <TrashIcon onClick={() => {handleDeleteUser(client)}} className="h-4 w-4 block" />
-                    </div>
-                    <Dialog.Root>
-                      <Dialog.Trigger onClick={() => handleEditUser()} className="rounded-full bg-gray-200 p-2 cursor-pointer hover:text-amber hover:bg-purple-contrast hover:scale-110 transition ease-in-out duration-200">
-                        <Pencil1Icon className="h-4 w-4 block" />
-                      </Dialog.Trigger>
-
-                      <Dialog.Portal>
-                        <Dialog.Overlay className="fixed inset-0 bg-black/50"/>
-                        <Dialog.Content className="fixed top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 rounded-lg bg-white
-                      text-white shadow w-full max-w-2xl overflow-hidden">
-
-                            <div className="flex items-center justify-between p-6 bg-purple-contrast">
-                              <Dialog.Title
-                               className="text-xl font-semibold">Editar cliente
-                              </Dialog.Title>
-                              <Dialog.Close>
-                                <Cross1Icon className="w-6 h-6 hover:text-amber"/>
-                              </Dialog.Close>
-                            </div>
-                            <ClientsFields client={client}/>
-
-                            <div className="text-right mr-2">
-                              <Dialog.Close className="px-6 py-2 mt-6 mb-4 mr-4 border-2 border-black rounded-lg text-lg text-gray-600 hover:text-black transition ease-in-out duration-200">
-                                Cancelar
-                              </Dialog.Close>
-                              <button className="bg-purple-highlight px-9 py-2 mt-6 mb-4 mr-4 border-2 border-purple-highlight rounded-lg text-lg font-semibold hover:text-amber transition ease-in-out duration-200">
-                                Save
-                              </button>
-                            </div>
-
-                        </Dialog.Content>
-                      </Dialog.Portal>
-                    </Dialog.Root>
-                  </div>
-                </div>
-            ))}
-            <Dialog.Root>
-            <Dialog.Trigger onClick={() => handleAddUser()} className="fixed cursor-pointer bottom-7 right-10 rounded-xl text-white bg-purple-highlight p-2 hover:scale-110 transition ease-in-out duration-200">
-              <PlusIcon className=" w-8 h-8 hover:text-amber" />
-            </Dialog.Trigger>
-
-            <Dialog.Portal>
-                        <Dialog.Overlay className="fixed inset-0 bg-black/50"/>
-                        <Dialog.Content className="fixed top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 rounded-lg bg-white
-                      text-white shadow w-full max-w-2xl overflow-hidden">
-
-                            <div className="flex items-center justify-between p-6 bg-purple-contrast">
-                              <Dialog.Title
-                               className="text-xl font-semibold">Cadastrar cliente
-                              </Dialog.Title>
-                              <Dialog.Close>
-                                <Cross1Icon className="w-6 h-6 hover:text-amber"/>
-                              </Dialog.Close>
-                            </div>
-                            <ClientsFields client={''}/>
-
-                            <div className="text-right mr-2">
-                              <Dialog.Close className="px-6 py-2 mt-6 mb-4 mr-4 border-2 border-black rounded-lg text-lg text-gray-600 hover:text-black transition ease-in-out duration-200">
-                                Cancelar
-                              </Dialog.Close>
-                              <button className="bg-purple-highlight px-9 py-2 mt-6 mb-4 mr-4 border-2 border-purple-highlight rounded-lg text-lg font-semibold hover:text-amber transition ease-in-out duration-200">
-                                Save
-                              </button>
-                            </div>
-
-                        </Dialog.Content>
-                      </Dialog.Portal>
-            </Dialog.Root>
+      <div className="flex flex-row w-full font-body">
+        <Menu />
+        <div className="w-full h-full">
+        <div className="border-y grid grid-cols-9  items-center p-3 pl-6 bg-gray-100 text-gray-600">
+              <div className="flex items-center gap-8 text-lg col-span-2">
+                <input type="checkbox"/>
+                Nome
+              </div>
+              <div className="col-span-2">
+                Endereço
+              </div>
+              <div className="col-span-2">
+                Contato
+              </div>
+              <div className="col-span-2">
+                CPF/CNPJ
+              </div>
             </div>
+        {Clients.map(client => (
+            <div key={client.id} className="border-y grid grid-cols-9 items-center p-3 pl-6">
+            <div className="flex items-center gap-8 text-lg col-span-2">
+              <input type="checkbox"/>
+              {client.name}
+            </div>
+            <div className="col-span-2">
+              {client.address}
+            </div>
+            <div className="col-span-2">
+              {client.contact}
+            </div>
+            <div className="col-span-2">
+              {client.cnpj}
+            </div>
+            <div className="flex justify-evenly">
+              <div className="rounded-full bg-gray-200 p-2 cursor-pointer hover:text-amber hover:bg-purple-contrast hover:scale-110 transition ease-in-out duration-200" >
+                <TrashIcon onClick={() => {handleDeleteUser(client)}} className="h-4 w-4 block" />
+              </div>
+              <Dialog.Root open={open} onOpenChange={setOpen}>
+                <Dialog.Trigger className="rounded-full bg-gray-200 p-2 cursor-pointer hover:text-amber hover:bg-purple-contrast hover:scale-110 transition ease-in-out duration-200">
+                  <Pencil1Icon className="h-4 w-4 block" />
+                </Dialog.Trigger>
+      
+                <Dialog.Portal>
+                  <Dialog.Overlay className="fixed inset-0 bg-black/50"/>
+                  <Dialog.Content className="fixed top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 rounded-lg bg-white
+                text-white shadow w-full max-w-2xl overflow-hidden">
+      
+                      <div className="flex items-center justify-between p-6 bg-purple-contrast">
+                        <Dialog.Title
+                          className="text-xl font-semibold">Editar cliente
+                        </Dialog.Title>
+                        <Dialog.Close>
+                          <Cross1Icon className="w-6 h-6 hover:text-amber"/>
+                        </Dialog.Close>
+                      </div>
+
+
+                      <form onSubmit={handleSubmitEdit}>
+                        <ClientsFields client={client}/>
+                        <div className="text-right mr-2">
+                          <Dialog.Close className="px-6 py-2 mt-6 mb-4 mr-4 border-2 border-black rounded-lg text-lg text-gray-600 hover:text-black transition ease-in-out duration-200">
+                            Cancelar
+                          </Dialog.Close>
+                          <button className="bg-purple-highlight px-9 py-2 mt-6 mb-4 mr-4 border-2 border-purple-highlight rounded-lg text-lg font-semibold hover:text-amber transition ease-in-out duration-200">
+                            Save
+                          </button>
+                        </div>
+                      </form>
+      
+                  </Dialog.Content>
+                </Dialog.Portal>
+              </Dialog.Root>
+            </div>
+          </div>
+        ))}
+        <Dialog.Root open={open} onOpenChange={setOpen}>
+          <Dialog.Trigger className="fixed cursor-pointer bottom-7 right-10 rounded-xl text-white bg-purple-highlight p-2 hover:scale-110 transition ease-in-out duration-200">
+            <PlusIcon className=" w-8 h-8 hover:text-amber" />
+          </Dialog.Trigger>
+
+          <Dialog.Portal>
+            <Dialog.Overlay className="fixed inset-0 bg-black/50"/>
+            <Dialog.Content className="fixed top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 rounded-lg bg-white
+          text-white shadow w-full max-w-2xl overflow-hidden">
+
+                <div className="flex items-center justify-between p-6 bg-purple-contrast">
+                  <Dialog.Title
+                    className="text-xl font-semibold">Cadastrar cliente
+                  </Dialog.Title>
+                  <Dialog.Close>
+                    <Cross1Icon className="w-6 h-6 hover:text-amber"/>
+                  </Dialog.Close>
+                </div>
+
+
+                <form onSubmit={handleSubmitCreate}>
+                  <ClientsFields client={''}/>
+                  <div className="text-right mr-2">
+                    <Dialog.Close className="px-6 py-2 mt-6 mb-4 mr-4 border-2 border-black rounded-lg text-lg text-gray-600 hover:text-black transition ease-in-out duration-200">
+                      Cancelar
+                    </Dialog.Close>
+                    <button className="bg-purple-highlight px-9 py-2 mt-6 mb-4 mr-4 border-2 border-purple-highlight rounded-lg text-lg font-semibold hover:text-amber transition ease-in-out duration-200">
+                      Save
+                    </button>
+                  </div>
+                </form>
+
+            </Dialog.Content>
+          </Dialog.Portal>
+        </Dialog.Root>
         </div>
-     );
+      </div>
+  );
 }
+
 
 
 function ClientsFields ({client}) {
@@ -182,6 +199,8 @@ function ClientsFields ({client}) {
           className="text-gray-600 mt-2 py-1.5 px-2 block w-11/12 rounded-md border border-gray-300 shadow focus:border-purple-contrast focus:text-gray-800"
           type="text"
           defaultValue={client.name}
+          name="name"
+          required
           />
         </div>
         <div className="w-full">
@@ -190,6 +209,8 @@ function ClientsFields ({client}) {
           className="text-gray-600 mt-2 py-1.5 px-2 block w-11/12 rounded-md border border-gray-300 shadow focus:border-purple-contrast focus:text-gray-800"
           type="text"
           defaultValue={client.cnpj}
+          name="cnpj"
+          required
           />
         </div>
       </div>
@@ -198,11 +219,12 @@ function ClientsFields ({client}) {
       <div className="flex justify-evenly">
         <div className="w-full">
           <label className="text-gray-900 font-medium">Celular</label>
-          <input 
-          autoFocus
+          <input
           className="text-gray-600 mt-2 py-1.5 px-2 block w-11/12 rounded-md border border-gray-300 shadow focus:border-purple-contrast focus:text-gray-800"
           type="text"
           // defaultValue={}
+          name="cell"
+          required
           />
         </div>
         <div className="w-full">
@@ -211,6 +233,8 @@ function ClientsFields ({client}) {
           className="text-gray-600 mt-2 py-1.5 px-2 block w-11/12 rounded-md border border-gray-300 shadow focus:border-purple-contrast focus:text-gray-800"
           type="text"
           // defaultValue={}
+          name="email"
+          required
           />
         </div>
       </div>
@@ -220,26 +244,32 @@ function ClientsFields ({client}) {
         <div className="flex">
           <div className="w-2/6">
             <label className="text-gray-900 font-medium">CEP</label>
-            <input 
-            autoFocus
+            <input
             className="w-5/6 text-gray-600 mt-2 py-1.5 px-2 block rounded-md border border-gray-300 shadow focus:border-purple-contrast focus:text-gray-800"
             type="text"
             // defaultValue={}
+            name="cep"
+            required
             />
           </div>
           <div className="w-2/6">
             <label className="text-gray-900 font-medium">Cidade</label>
-            <input 
-            autoFocus
+            <input
             className="w-5/6 text-gray-600 mt-2 py-1.5 px-2 block rounded-md border border-gray-300 shadow focus:border-purple-contrast focus:text-gray-800"
             type="text"
             // defaultValue={}
+            name="city"
+            required
             />
           </div>
           <div className="w-2/6">
             <label className="text-gray-900 font-medium">Estado</label>
-            <select className="w-5/6 text-gray-600 mt-2 py-1.5 px-2 block rounded-md border border-gray-300 shadow" required>
-              <option value="" disabled selected>Selecione o estado</option>
+            <select 
+            className="w-5/6 text-gray-600 mt-2 py-1.5 px-2 block rounded-md border border-gray-300 shadow" 
+            // defaultValue={}
+            name="state"
+            required
+            >
               <option value="AC">Acre</option>
               <option value="AL">Alagoas</option>
               <option value="AP">Amapá</option>
@@ -273,29 +303,32 @@ function ClientsFields ({client}) {
         <div className="flex">
           <div className="w-2/6 mt-4">
             <label className="text-gray-900 font-medium">Bairro</label>
-            <input 
-            autoFocus
+            <input
             className="w-5/6 text-gray-600 mt-2 py-1.5 px-2 block rounded-md border border-gray-300 shadow focus:border-purple-contrast focus:text-gray-800"
             type="text"
             // defaultValue={}
+            name="neighborhood"
+            required
             />
           </div>
           <div className="w-2/6 mt-4">
             <label className="text-gray-900 font-medium">Rua</label>
-            <input 
-            autoFocus
+            <input
             className="w-5/6 text-gray-600 mt-2 py-1.5 px-2 block rounded-md border border-gray-300 shadow focus:border-purple-contrast focus:text-gray-800"
             type="text"
             // defaultValue={}
+            name="street"
+            required
             />
           </div>
           <div className="w-2/6 mt-4">
             <label className="text-gray-900 font-medium">Número</label>
-            <input 
-            autoFocus
+            <input
             className="w-5/6 text-gray-600 mt-2 py-1.5 px-2 block rounded-md border border-gray-300 shadow focus:border-purple-contrast focus:text-gray-800"
             type="text"
             // defaultValue={}
+            name="number"
+            required
             />
           </div>
         </div>
