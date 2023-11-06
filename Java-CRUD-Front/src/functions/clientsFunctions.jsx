@@ -162,6 +162,21 @@ export const updateStatusClient = async (id, client) => {
   if (!upd.ok) {
     throw Error('Could not update the status of the client')
   }
+
   return upd.json()
 
 }
+
+// Necessario atualizar a api para saber como sera feito:
+export const clientDelete = async (id) => {
+  const del = await fetch(`http://localhost:8080/api/client/${id}`, {
+    method: 'DELETE',
+  }) 
+
+  if (!del.ok) {
+    throw Error('Could not delete the client')
+  }
+
+  return del.json()
+}
+

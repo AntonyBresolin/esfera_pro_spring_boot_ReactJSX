@@ -1,8 +1,8 @@
 import { useLoaderData } from "react-router-dom";
 import { Menu } from "../Layouts/Menu";
-import { updateStatusClient } from "../functions/clientsFunctions";
+import { clientDelete, updateStatusClient } from "../functions/clientsFunctions";
 import { useState } from "react";
-import { ReloadIcon } from "@radix-ui/react-icons";
+import { ReloadIcon, TrashIcon } from "@radix-ui/react-icons";
 
 export const Trashcan = () => {
     const initialClients = useLoaderData()
@@ -10,6 +10,13 @@ export const Trashcan = () => {
 
     const handleRestoreClient = (client) => {
         updateStatusClient(client.id, client)
+        const newClients = Clients.filter((c) => c.id !== client.id)
+        setClients(newClients)
+    }
+
+    const handleDeleteClient = (client) => {
+        console.log(client.id)
+        clientDelete(client.id)
         const newClients = Clients.filter((c) => c.id !== client.id)
         setClients(newClients)
     }
@@ -50,8 +57,11 @@ export const Trashcan = () => {
                         </div>
                         <div className="flex justify-evenly">
                             <div title="Restaurar Cliente" className="rounded-full bg-gray-200 p-2 cursor-pointer hover:text-amber hover:bg-purple-contrast hover:scale-110 transition ease-in-out duration-200" >
-                            <ReloadIcon onClick={() => {handleRestoreClient(eachClient)}} className="h-4 w-4 block" />
+                                <ReloadIcon onClick={() => {handleRestoreClient(eachClient)}} className="h-4 w-4 block" />
                             </div>
+                            <div title="Deletar Cliente(W.I.P)" className="rounded-full bg-gray-200 p-2 cursor-pointer hover:text-amber hover:bg-purple-contrast hover:scale-110 transition ease-in-out duration-200" >
+                                <TrashIcon onClick={() => {handleDeleteClient(eachClient)}} className="h-4 w-4 block" />
+                            </div>                            
                         </div>
                     </div>
                 ))}
