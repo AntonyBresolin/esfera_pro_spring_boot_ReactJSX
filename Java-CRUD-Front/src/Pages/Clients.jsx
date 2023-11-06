@@ -2,7 +2,7 @@ import { useLoaderData } from "react-router-dom";
 import { Menu }  from "../Layouts/Menu";
 import { Cross1Icon, Pencil1Icon, PlusIcon, TrashIcon } from "@radix-ui/react-icons";
 import * as Dialog from '@radix-ui/react-dialog';
-import { clientCreate, updateStatusClient } from "../functions/clientsFunctions";
+import { clientCreate, clientUpdate, updateStatusClient } from "../functions/clientsFunctions";
 import { useState } from "react";
 
 /* 
@@ -59,22 +59,20 @@ export const Clients = () => {
       setOpenE(true)
     }
 
-    const handleSubmitEdit = (e) => {
+
+    // Necessario atualizar a api para saber como sera feito:
+    const handleSubmitEdit = async (e) => {
       e.preventDefault()
       let data = Object.fromEntries(new FormData(e.target))
-      console.log(data)
-      // const res = ""
-      // const newClients = ""
-      // setClients(newClients)
+      // const res = await clientUpdate(data, Clients)
+      // setClients(res)
       setOpenE(false)
     }
     const handleSubmitCreate = async (e) => {
       e.preventDefault()
       let data = Object.fromEntries(new FormData(e.target))
-      console.log(data)
       const res = await clientCreate(data, Clients)
-      const newClients = res
-      setClients(newClients)
+      setClients(res)
       setOpenC(false)
     }
 
@@ -124,49 +122,49 @@ export const Clients = () => {
             </div>
           ))}
 
-        <section key={'Edit Dialog'}>
-                  <Dialog.Root open={openE} onOpenChange={setOpenE}>
-                    <Dialog.Portal>
-                      <Dialog.Overlay className="fixed inset-0 bg-black/50 data-[state=open]:animate-[overlay-show_200ms] data-[state=closed]:animate-[overlay-hide_200ms]"/>
-                      <Dialog.Content className="fixed top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 rounded-lg bg-white
-                    text-white shadow w-full max-w-2xl overflow-hidden data-[state=open]:animate-[dialog-show_200ms] data-[state=closed]:animate-[dialog-hide_200ms] ">
-          
-                          <div className="flex items-center justify-between p-6 bg-purple-contrast">
-                            <Dialog.Title
-                              className="text-xl font-semibold">Editar cliente
-                            </Dialog.Title>
-                            <Dialog.Close>
-                              <Cross1Icon className="w-6 h-6 hover:text-amber"/>
-                            </Dialog.Close>
-                          </div>
-  
-                          <form onSubmit={handleSubmitEdit}>
-                            <ClientsFields client={client}/>
-                            <div className="text-right mr-2">
-                              <Dialog.Close className="px-6 py-2 mt-6 mb-4 mr-4 border-2 border-black rounded-lg text-lg text-gray-600 hover:text-black transition ease-in-out duration-200">
-                                Cancelar
-                              </Dialog.Close>
-                              <button className="bg-purple-highlight px-9 py-2 mt-6 mb-4 mr-4 border-2 border-purple-highlight rounded-lg text-lg font-semibold hover:text-amber transition ease-in-out duration-200">
-                                Save
-                              </button>
-                            </div>
-                          </form>
-                      </Dialog.Content>
-                    </Dialog.Portal>
-                  </Dialog.Root>
-        </section>
+          <section key={'Edit Dialog'}>
+            <Dialog.Root open={openE} onOpenChange={setOpenE}>
+              <Dialog.Portal>
+                <Dialog.Overlay className="fixed inset-0 bg-black/50 data-[state=open]:animate-[overlay-show_200ms] data-[state=closed]:animate-[overlay-hide_200ms]"/>
+                <Dialog.Content className="fixed top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 rounded-lg bg-white
+              text-white shadow w-full max-w-2xl overflow-hidden data-[state=open]:animate-[dialog-show_200ms] data-[state=closed]:animate-[dialog-hide_200ms] ">
+    
+                  <div className="flex items-center justify-between p-6 bg-purple-contrast">
+                    <Dialog.Title
+                      className="text-xl font-semibold">Editar cliente
+                    </Dialog.Title>
+                    <Dialog.Close>
+                      <Cross1Icon className="w-6 h-6 hover:text-amber"/>
+                    </Dialog.Close>
+                  </div>
 
-        <section key={'Create Dialog'}>
-          <Dialog.Root open={openC} onOpenChange={setOpenC}>
-            <Dialog.Trigger className="fixed cursor-pointer bottom-7 right-10 rounded-xl text-white bg-purple-highlight p-2 hover:scale-110 transition ease-in-out duration-200">
-              <PlusIcon className=" w-8 h-8 hover:text-amber" />
-            </Dialog.Trigger>
-  
-            <Dialog.Portal>
-              <Dialog.Overlay className="fixed inset-0 bg-black/50"/>
-              <Dialog.Content className="fixed top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 rounded-lg bg-white
-            text-white shadow w-full max-w-2xl overflow-hidden">
-  
+                  <form onSubmit={handleSubmitEdit}>
+                    <ClientsFields client={client}/>
+                    <div className="text-right mr-2">
+                      <Dialog.Close className="px-6 py-2 mt-6 mb-4 mr-4 border-2 border-black rounded-lg text-lg text-gray-600 hover:text-black transition ease-in-out duration-200">
+                        Cancelar
+                      </Dialog.Close>
+                      <button className="bg-purple-highlight px-9 py-2 mt-6 mb-4 mr-4 border-2 border-purple-highlight rounded-lg text-lg font-semibold hover:text-amber transition ease-in-out duration-200">
+                        Save
+                      </button>
+                    </div>
+                  </form>
+                </Dialog.Content>
+              </Dialog.Portal>
+            </Dialog.Root>
+          </section>
+
+          <section key={'Create Dialog'}>
+            <Dialog.Root open={openC} onOpenChange={setOpenC}>
+              <Dialog.Trigger className="fixed cursor-pointer bottom-7 right-10 rounded-xl text-white bg-purple-highlight p-2 hover:scale-110 transition ease-in-out duration-200">
+                <PlusIcon className=" w-8 h-8 hover:text-amber" />
+              </Dialog.Trigger>
+    
+              <Dialog.Portal>
+                <Dialog.Overlay className="fixed inset-0 bg-black/50 data-[state=open]:animate-[overlay-show_200ms] data-[state=closed]:animate-[overlay-hide_200ms]"/>
+                <Dialog.Content className="fixed top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 rounded-lg bg-white
+              text-white shadow w-full max-w-2xl overflow-hidden data-[state=open]:animate-[dialog-show_200ms] data-[state=closed]:animate-[dialog-hide_200ms] ">
+    
                   <div className="flex items-center justify-between p-6 bg-purple-contrast">
                     <Dialog.Title
                       className="text-xl font-semibold">Cadastrar cliente
@@ -175,7 +173,7 @@ export const Clients = () => {
                       <Cross1Icon className="w-6 h-6 hover:text-amber"/>
                     </Dialog.Close>
                   </div>
-  
+    
                   <form onSubmit={handleSubmitCreate}>
                     <ClientsFields client={client}/>
                     <div className="text-right mr-2">
@@ -187,10 +185,10 @@ export const Clients = () => {
                       </button>
                     </div>
                   </form>
-              </Dialog.Content>
-            </Dialog.Portal>
-          </Dialog.Root>
-        </section>
+                </Dialog.Content>
+              </Dialog.Portal>
+            </Dialog.Root>
+          </section>
         </div>
       </div>
   );

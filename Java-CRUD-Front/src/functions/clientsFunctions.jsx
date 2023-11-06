@@ -10,8 +10,9 @@ export const clientsLoader = async () => {
 }
 
 export const clientCreate = async (data, clients) => {
+  const id =clients.length + 1
   const client = {
-    id: clients.length + 1,
+    id: id,
     name: data.name,
     cnpj: data.cnpj,
     status: "Active"
@@ -72,6 +73,68 @@ export const clientCreate = async (data, clients) => {
   }
 
   return clientsLoader()
+
+}
+
+
+
+// Necessario atualizar a api para saber como sera feito:
+export const clientUpdate = async (data, clients) => {
+  const id =clients.length
+  const client = {
+    id: id,
+    name: data.name,
+    cnpj: data.cnpj,
+    status: "Active"
+  }
+  
+  const address = {
+    cep: data.cep,
+    state: data.state,
+    city: data.city,
+    neighborhood: data.neighborhood,
+    street: data.street,
+    number: data.number,
+    complement: "nothing",
+    client
+  }	
+
+  const contact = {
+    name: data.cell,
+    type: 1,
+    contentContact: data.email,
+    client
+  }
+
+  const c = await fetch(`http://localhost:8080/api/client/${id}`, {
+    method: 'PUT',
+    headers: {
+      'Content-type': 'application/json',
+    },
+    body: JSON.stringify(client),
+  })
+
+  const a = await fetch(`http://localhost:8080/api/address/${id}`, {
+    method: 'PUT',
+    headers: {
+      'Content-type': 'application/json',
+    },
+    body: JSON.stringify(address),
+  })
+
+
+  const ct = await fetch(`http://localhost:8080/api/contact/${id}`, {
+    method: 'PUT',
+    headers: {
+      'Content-type': 'application/json',
+    },
+    body: JSON.stringify(contact),
+  })
+
+  if (!c.ok || !a.ok || !ct.ok) {
+    throw Error('Could not update the client')
+  }
+
 
 }
 
