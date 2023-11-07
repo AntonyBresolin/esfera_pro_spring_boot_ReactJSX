@@ -6,17 +6,15 @@ export const AuthContext = createContext()
 export const Authenticate = () => {
     const [auth, setAuth] = useState({user: '', authenticated: false})
     
-    const login = (username, password) => {
-
-        return new Promise((resolve, reject) => {
-
-             if (password === "password") {
-                  setAuth({user: username, authenticated: true})
-                  resolve("success")
-             } else {
-                  reject("Incorrect username or password")
+    const login = async (data) => {
+     if (data.username === "" || data.password === "") {
+            return false
+     }
+    const res = await fetch(`http://localhost:8080/api/user/${data.username}/${data.password}`)
+    const resData = await res.json()
+             if (res.ok) {
+                  setAuth({user: resData.name, authenticated: true})
              }
-        }) 
    }
 
    const logout = () => {
