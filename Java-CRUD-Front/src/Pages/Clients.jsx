@@ -44,6 +44,9 @@ contact format:
 }
 */ 
 export const Clients = () => {
+  function teste() {  
+    console.log('teste')
+}
     const initialClients = useLoaderData()
     const [Clients, setClients] = useState(initialClients)
     const [openC, setOpenC] = useState(false)

@@ -5,8 +5,10 @@ import { ReloadIcon, TrashIcon } from "@radix-ui/react-icons";
 
 import { Menu } from "../Layouts/Menu";
 import { clientDelete, updateStatusClient } from "../functions/clientsFunctions";
+import { ConfirmationPopup } from "../functions/ConfirmationPopup";
 
 export const Trashcan = () => {
+    const message = "O cliente será restaurado para a lista de clientes ativos"
     const initialClients = useLoaderData()
     const [Clients, setClients] = useState(initialClients) 
 
@@ -57,9 +59,7 @@ export const Trashcan = () => {
                             {eachClient.cnpj}
                         </div>
                         <div className="flex justify-evenly">
-                            <div title="Restaurar Cliente" onClick={() => {handleRestoreClient(eachClient)}} className="rounded-full bg-gray-200 p-2 cursor-pointer hover:text-amber hover:bg-purple-contrast hover:scale-110 transition ease-in-out duration-200" >
-                                <ReloadIcon className="h-4 w-4 block" />
-                            </div>
+                            <ConfirmationPopup handleAction={() => handleRestoreClient(eachClient)}  message={message}  />
                             <div title="Deletar Cliente(W.I.P)" onClick={() => {handleDeleteClient(eachClient)}} className="rounded-full bg-gray-200 p-2 cursor-pointer hover:text-amber hover:bg-purple-contrast hover:scale-110 transition ease-in-out duration-200" >
                                 <TrashIcon className="h-4 w-4 block" />
                             </div>                            
