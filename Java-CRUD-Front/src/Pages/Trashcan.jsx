@@ -17,7 +17,7 @@ export const Trashcan = () => {
 
     const handleRestoreClient = (client) => {
         setClient(client)
-        setMessage(`Deseja restaurar o cliente ${client.name}?`)
+        setMessage(`Você esta prestes a restaurar o cliente ${client.name}.`)
         setFunctions(() => restoreClient)
         console.log(functions)
         setOpen(true)
@@ -32,7 +32,7 @@ export const Trashcan = () => {
 
     const handleDeleteClient = (client) => {
         setClient(client)
-        setMessage(`Deseja deletar o cliente ${client.name}?`)
+        setMessage(`Você esta prestes a deletar permanentemente o cliente ${client.name}.`)
         setFunctions(() => deleteClient)
         setOpen(true)
     }

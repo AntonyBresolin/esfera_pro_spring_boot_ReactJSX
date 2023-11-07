@@ -5,6 +5,8 @@ import { Cross1Icon, Pencil1Icon, PlusIcon, TrashIcon } from "@radix-ui/react-ic
 import * as Dialog from '@radix-ui/react-dialog';
 
 import { clientCreate, clientUpdate, updateStatusClient } from "../functions/clientsFunctions";
+import { ConfirmationPopup } from "../functions/ConfirmationPopup";
+
 import { Menu }  from "../Layouts/Menu";
 
 /* 
@@ -44,16 +46,23 @@ contact format:
 }
 */ 
 export const Clients = () => {
-  function teste() {  
-    console.log('teste')
-}
     const initialClients = useLoaderData()
     const [Clients, setClients] = useState(initialClients)
+    const [message, setMessage] = useState("")
+    const [functions, setFunctions] = useState( () => {})
+    const [open, setOpen] = useState(false)
     const [openC, setOpenC] = useState(false)
     const [openE, setOpenE] = useState(false)
     const [client, setClient] = useState({})
 
-    const handleDeleteClient = (client) => {
+    const handleRemoveClient = (client) => {
+      setClient(client)
+      setMessage(`Você esta prestes a remover o cliente ${client.name}.`)
+      setFunctions(() => removeClient)
+      setOpen(true)
+    }
+
+    const removeClient = (client) => {
       updateStatusClient(client.id, client)
       const newClients = Clients.filter((c) => c.id !== client.id)
       setClients(newClients)
@@ -116,7 +125,7 @@ export const Clients = () => {
                 {eachClient.cnpj}
               </div>
               <div className="flex justify-evenly">
-                <div title="Remover Cliente" onClick={() => {handleDeleteClient(eachClient)}} className="rounded-full bg-gray-200 p-2 cursor-pointer hover:text-amber hover:bg-purple-contrast hover:scale-110 transition ease-in-out duration-200" >
+                <div title="Remover Cliente" onClick={() => {handleRemoveClient(eachClient)}} className="rounded-full bg-gray-200 p-2 cursor-pointer hover:text-amber hover:bg-purple-contrast hover:scale-110 transition ease-in-out duration-200" >
                   <TrashIcon className="h-4 w-4 block" />
                 </div>
                 <div title="Editar Cliente(W.I.P)" onClick={() => {handleEditClient(eachClient)}} className="rounded-full bg-gray-200 p-2 cursor-pointer hover:text-amber hover:bg-purple-contrast hover:scale-110 transition ease-in-out duration-200">
@@ -126,6 +135,9 @@ export const Clients = () => {
               </div>
             </div>
           ))}
+
+          <ConfirmationPopup open={open} setOpen={setOpen} handleAction={() => functions(client)}  message={message}  />
+
 
           {/* Dialog de Edit */}
             <Dialog.Root open={openE} onOpenChange={setOpenE}>
@@ -149,7 +161,7 @@ export const Clients = () => {
                       <Dialog.Close className="px-6 py-2 mt-6 mb-4 mr-4 border-2 border-black rounded-lg text-lg text-gray-600 hover:text-black transition ease-in-out duration-200">
                         Cancelar
                       </Dialog.Close>
-                      <button className="bg-purple-highlight px-9 py-2 mt-6 mb-4 mr-4 border-2 border-purple-highlight rounded-lg text-lg font-semibold hover:text-amber transition ease-in-out duration-200">
+                      <button className="bg-purple-highlight px-9 py-2 mt-6 mb-4 mr-4 border-2 border-purple-highlight rounded-lg text-lg font-semibold hover:text-amber hover:scale-105 transition ease-in-out duration-200">
                         Save
                       </button>
                     </div>
@@ -158,7 +170,7 @@ export const Clients = () => {
               </Dialog.Portal>
             </Dialog.Root>
           
-              {/* Dialog de criação */}
+          {/* Dialog de criação */}
             <Dialog.Root open={openC} onOpenChange={setOpenC}>
               <Dialog.Trigger title="Adicionar Cliente" className="fixed cursor-pointer bottom-7 right-10 rounded-xl text-white bg-purple-highlight p-2 hover:scale-110 transition ease-in-out duration-200">
                 <PlusIcon className=" w-8 h-8 hover:text-amber" />
@@ -184,7 +196,7 @@ export const Clients = () => {
                       <Dialog.Close className="px-6 py-2 mt-6 mb-4 mr-4 border-2 border-black rounded-lg text-lg text-gray-600 hover:text-black transition ease-in-out duration-200">
                         Cancelar
                       </Dialog.Close>
-                      <button className="bg-purple-highlight px-9 py-2 mt-6 mb-4 mr-4 border-2 border-purple-highlight rounded-lg text-lg font-semibold hover:text-amber transition ease-in-out duration-200">
+                      <button className="bg-purple-highlight px-9 py-2 mt-6 mb-4 mr-4 border-2 border-purple-highlight rounded-lg text-lg font-semibold hover:text-amber hover:scale-105 transition ease-in-out duration-200">
                         Save
                       </button>
                     </div>
