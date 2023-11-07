@@ -5,6 +5,7 @@ import com.github.antonybresolin.api_spring_boot_esfera.repositories.ClientRepos
 import com.github.antonybresolin.api_spring_boot_esfera.repositories.ContactRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.lang.reflect.Array;
 import java.util.List;
@@ -36,6 +37,12 @@ public class ContactService {
 
     public List<Contact> findContactsByClientId(Long clientId) {
         return contactRepository.findByClientId(clientId);
+    }
+
+
+    @Transactional
+    public void deleteContactsByClientId(Long id) {
+        contactRepository.deleteContactsByClientId(id);
     }
 
 }

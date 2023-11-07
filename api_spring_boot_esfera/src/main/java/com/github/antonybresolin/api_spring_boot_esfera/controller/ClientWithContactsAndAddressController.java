@@ -11,10 +11,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.transaction.annotation.Transactional;
+import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
@@ -49,6 +47,20 @@ public class ClientWithContactsAndAddressController {
 
             ClientWithContactsAndAddress clientWithContactsAndAddress = new ClientWithContactsAndAddress(client, address, contacts);
             return new ResponseEntity<>(clientWithContactsAndAddress, HttpStatus.OK);
+        } catch (Exception e) {
+            // Log the exception details here to debug
+            return new ResponseEntity<>("An error occurred", HttpStatus.INTERNAL_SERVER_ERROR);
+        }
+    }
+
+    @Transactional
+    @DeleteMapping(value = "/{id}")
+    public ResponseEntity<?> deleteAdressAndContactsByClientId(@PathVariable Long id) {
+        try {
+            addressService.deleteByClientId(id);
+            contactService.deleteContactsByClientId(id);
+            clientService.deleteById(id);
+            return new ResponseEntity<>(HttpStatus.OK);
         } catch (Exception e) {
             // Log the exception details here to debug
             return new ResponseEntity<>("An error occurred", HttpStatus.INTERNAL_SERVER_ERROR);
