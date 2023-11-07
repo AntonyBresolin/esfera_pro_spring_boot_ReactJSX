@@ -12,9 +12,11 @@ const useAuth = () => {
 export const ProtectedRoutes = () => {
     const location = useLocation();
     const isAuth = useAuth();
-    return isAuth ? (
-        <Outlet />
-    ) : (
-        <Navigate to="/login" replace state={{ from: location }} />
-    );
+    return <Outlet />
+
+    // return isAuth ? (
+    //     <Outlet />
+    // ) : (
+    //     <Navigate to="/login" replace state={{ from: location }} />
+    // );
 };

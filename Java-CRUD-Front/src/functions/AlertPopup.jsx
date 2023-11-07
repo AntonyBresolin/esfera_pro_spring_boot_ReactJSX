@@ -1,6 +1,14 @@
 import * as AlertDialog from '@radix-ui/react-alert-dialog';
 
-export const ConfirmationPopup = ({open, setOpen, handleAction, message}) => {
+export const AlertPopup = ({open, setOpen, handleAction, message, type}) => {
+    
+    let title = ""
+    if (type === "confirmation") {
+        title = "Você tem certeza?"
+    } else if (type === "error") {
+        title = "Erro!"
+    }
+
 
 return (
     <AlertDialog.Root open={open} onOpenChange={setOpen} >
@@ -9,7 +17,7 @@ return (
             <AlertDialog.Content className="fixed top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 rounded-lg bg-white text-white shadow w-full max-w-md overflow-hidden data-[state=open]:animate-[dialog-show_200ms] data-[state=closed]:animate-[dialog-hide_200ms]">
                 <div className='flex items-center justify-center p-4 bg-purple-contrast'>
                     <AlertDialog.Title className="text-lg font-semibold">
-                        Você tem certeza?
+                        {title}
                     </AlertDialog.Title>
                 </div>
                 <AlertDialog.Description className="text-lg text-gray-500 py-3 px-6 text-center">

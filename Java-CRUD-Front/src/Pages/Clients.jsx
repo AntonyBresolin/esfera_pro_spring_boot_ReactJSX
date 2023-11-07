@@ -5,7 +5,7 @@ import { Cross1Icon, Pencil1Icon, PlusIcon, TrashIcon } from "@radix-ui/react-ic
 import * as Dialog from '@radix-ui/react-dialog';
 
 import { clientCreate, clientUpdate, updateStatusClient } from "../functions/clientsFunctions";
-import { ConfirmationPopup } from "../functions/ConfirmationPopup";
+import { AlertPopup } from "../functions/AlertPopup";
 
 import { Menu }  from "../Layouts/Menu";
 
@@ -136,7 +136,7 @@ export const Clients = () => {
             </div>
           ))}
 
-          <ConfirmationPopup open={open} setOpen={setOpen} handleAction={() => functions(client)}  message={message}  />
+          <AlertPopup open={open} setOpen={setOpen} handleAction={() => functions(client)}  message={message} type={"confirmation"}  />
 
 
           {/* Dialog de Edit */}
