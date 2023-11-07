@@ -30,7 +30,7 @@ public class AddressService {
         addressRepository.deleteById(id);
     }
 
-    public Address findByClientId(Long id) {
-        return addressRepository.findByClientId(id);
+    public Address findAddressByClientId(Long id) {
+        return addressRepository.findAddressByClientId(id);
     }
 }
