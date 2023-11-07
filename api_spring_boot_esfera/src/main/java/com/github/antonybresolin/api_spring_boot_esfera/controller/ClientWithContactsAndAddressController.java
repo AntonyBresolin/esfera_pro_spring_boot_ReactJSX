@@ -37,7 +37,11 @@ public class ClientWithContactsAndAddressController {
             }
 
             List<Contact> contacts = contactService.findContactsByClientId(id);
-            Address address = addressService.findByClientId(id);
+            if (contacts == null) {
+                return new ResponseEntity<>("Contacts not found", HttpStatus.NOT_FOUND);
+            }
+
+            Address address = addressService.findAddressByClientId(id);
 
             if (address == null) {
                 return new ResponseEntity<>("Address not found", HttpStatus.NOT_FOUND);

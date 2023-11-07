@@ -39,6 +39,6 @@ public class AddressController {
 
     @GetMapping(value = "/client/{id}")
     public Address findByClientId(@PathVariable Long id) {
-        return addressService.findByClientId(id);
+        return addressService.findAddressByClientId(id);
     }
 }
