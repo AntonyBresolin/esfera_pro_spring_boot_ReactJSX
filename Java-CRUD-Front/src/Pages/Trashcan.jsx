@@ -8,17 +8,36 @@ import { clientDelete, updateStatusClient } from "../functions/clientsFunctions"
 import { ConfirmationPopup } from "../functions/ConfirmationPopup";
 
 export const Trashcan = () => {
-    const message = "O cliente será restaurado para a lista de clientes ativos"
     const initialClients = useLoaderData()
+    const [message, setMessage] = useState("")
+    const [functions, setFunctions] = useState( () => {})
     const [Clients, setClients] = useState(initialClients) 
+    const [client, setClient] = useState({})
+    const [open, setOpen] = useState(false)
 
     const handleRestoreClient = (client) => {
+        setClient(client)
+        setMessage(`Deseja restaurar o cliente ${client.name}?`)
+        setFunctions(() => restoreClient)
+        console.log(functions)
+        setOpen(true)
+    }
+
+    const restoreClient = (client) => {
         updateStatusClient(client.id, client)
         const newClients = Clients.filter((c) => c.id !== client.id)
         setClients(newClients)
     }
 
+
     const handleDeleteClient = (client) => {
+        setClient(client)
+        setMessage(`Deseja deletar o cliente ${client.name}?`)
+        setFunctions(() => deleteClient)
+        setOpen(true)
+    }
+
+    const deleteClient = (client) => {
         clientDelete(client.id)
         const newClients = Clients.filter((c) => c.id !== client.id)
         setClients(newClients)
@@ -59,13 +78,16 @@ export const Trashcan = () => {
                             {eachClient.cnpj}
                         </div>
                         <div className="flex justify-evenly">
-                            <ConfirmationPopup handleAction={() => handleRestoreClient(eachClient)}  message={message}  />
+                            <div title="Restaurar Cliente" onClick={() => {handleRestoreClient(eachClient)}} className="rounded-full bg-gray-200 p-2 cursor-pointer hover:text-amber hover:bg-purple-contrast hover:scale-110 transition ease-in-out duration-200" >
+                                <ReloadIcon className="h-4 w-4 block" />
+                            </div>
                             <div title="Deletar Cliente(W.I.P)" onClick={() => {handleDeleteClient(eachClient)}} className="rounded-full bg-gray-200 p-2 cursor-pointer hover:text-amber hover:bg-purple-contrast hover:scale-110 transition ease-in-out duration-200" >
                                 <TrashIcon className="h-4 w-4 block" />
                             </div>                            
                         </div>
                     </div>
                 ))}
+                <ConfirmationPopup open={open} setOpen={setOpen} handleAction={() => functions(client)}  message={message}  />
             </div>
         </div>
      );

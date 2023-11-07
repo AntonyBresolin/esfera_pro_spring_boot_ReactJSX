@@ -1,15 +1,9 @@
 import * as AlertDialog from '@radix-ui/react-alert-dialog';
-import { ReloadIcon } from "@radix-ui/react-icons";	
 
-export const ConfirmationPopup = ({handleAction, message}) => {
+export const ConfirmationPopup = ({open, setOpen, handleAction, message}) => {
 
 return (
-    <AlertDialog.Root>
-        <AlertDialog.Trigger>
-        <div title="Restaurar Cliente" className="rounded-full bg-gray-200 p-2 cursor-pointer hover:text-amber hover:bg-purple-contrast hover:scale-110 transition ease-in-out duration-200" >
-            <ReloadIcon className="h-4 w-4 block" />
-        </div>
-        </AlertDialog.Trigger>
+    <AlertDialog.Root open={open} onOpenChange={setOpen} >
         <AlertDialog.Portal>
             <AlertDialog.Overlay className="fixed inset-0 bg-black/50 data-[state=open]:animate-[overlay-show_200ms] data-[state=closed]:animate-[overlay-hide_200ms]" />
             <AlertDialog.Content className="fixed top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 rounded-lg bg-white text-white shadow w-full max-w-md overflow-hidden data-[state=open]:animate-[dialog-show_200ms] data-[state=closed]:animate-[dialog-hide_200ms]">
