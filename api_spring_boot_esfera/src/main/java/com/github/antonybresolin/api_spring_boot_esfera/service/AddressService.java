@@ -4,6 +4,7 @@ import com.github.antonybresolin.api_spring_boot_esfera.model.Address;
 import com.github.antonybresolin.api_spring_boot_esfera.repositories.AddressRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 
@@ -32,5 +33,10 @@ public class AddressService {
 
     public Address findAddressByClientId(Long id) {
         return addressRepository.findAddressByClientId(id);
+    }
+
+    @Transactional
+    public void deleteByClientId(Long id) {
+        addressRepository.deleteByClientId(id);
     }
 }
