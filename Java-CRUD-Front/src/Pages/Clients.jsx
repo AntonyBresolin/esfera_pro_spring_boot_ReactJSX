@@ -48,11 +48,11 @@ contact format:
 export const Clients = () => {
     const initialClients = useLoaderData()
     const [Clients, setClients] = useState(initialClients)
-    const [message, setMessage] = useState("")
     const [functions, setFunctions] = useState( () => {})
     const [open, setOpen] = useState(false)
     const [openC, setOpenC] = useState(false)
     const [openE, setOpenE] = useState(false)
+    const [message, setMessage] = useState("")
     const [client, setClient] = useState({})
 
     const handleRemoveClient = (client) => {
