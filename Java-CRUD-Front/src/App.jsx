@@ -19,8 +19,7 @@ import { Trashcan } from "./Pages/Trashcan";
 const router = createBrowserRouter(
   createRoutesFromElements(
     <Route path="/" element={<DashBoardLayout />}>
-      <Route path="/" element={<DashBoard />} />
-      <Route path="dashboard" element={<DashBoard />} />
+      <Route index element={<DashBoard />} />
       <Route path="clients" element={<Clients />} loader={clientsActiveLoader}/>
       <Route path="trashcan" element={<Trashcan />} loader={clientsInactiveLoader} />
     
