@@ -1,7 +1,10 @@
 package com.github.antonybresolin.api_spring_boot_esfera.service;
 
+import com.github.antonybresolin.api_spring_boot_esfera.model.Address;
 import com.github.antonybresolin.api_spring_boot_esfera.model.Client;
+import com.github.antonybresolin.api_spring_boot_esfera.model.Contact;
 import com.github.antonybresolin.api_spring_boot_esfera.repositories.ClientRepository;
+import com.github.antonybresolin.api_spring_boot_esfera.repositories.ContactRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -10,7 +13,9 @@ import java.util.List;
 @Service
 public class ClientService {
     @Autowired
-    ClientRepository clientRepository;
+    private ClientRepository clientRepository;
+    private ContactRepository contactRepository;
+
 
     public Client findById(Long id) {
         return clientRepository.findById(id).get();
@@ -51,4 +56,9 @@ public class ClientService {
         client.setStatus("Inactive");
         return clientRepository.save(client);
     }
+
+   public List<Contact> findContactsByClientId(Long clientId) {
+        return contactRepository.findByClientId(clientId);
+    }
+
 }

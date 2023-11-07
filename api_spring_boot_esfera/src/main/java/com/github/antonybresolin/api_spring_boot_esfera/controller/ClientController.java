@@ -1,5 +1,6 @@
 package com.github.antonybresolin.api_spring_boot_esfera.controller;
 
+import com.github.antonybresolin.api_spring_boot_esfera.model.Address;
 import com.github.antonybresolin.api_spring_boot_esfera.model.Client;
 import com.github.antonybresolin.api_spring_boot_esfera.model.Contact;
 import com.github.antonybresolin.api_spring_boot_esfera.service.ClientService;
@@ -58,4 +59,10 @@ public class ClientController {
     public Client updateClientStatusInactive(@PathVariable(value = "id")Long id) {
         return clientService.updateClientStatusInactive(id);
     }
+
+    @GetMapping(value = "/{id}/contact")
+    public List<Contact> findContactsByClientId(@PathVariable Long id) {
+        return clientService.findContactsByClientId(id);
+    }
+
 }

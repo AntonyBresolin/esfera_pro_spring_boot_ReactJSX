@@ -36,4 +36,9 @@ public class AddressController {
     public void deleteById(@PathVariable(value = "id")Long id) {
         addressService.deleteById(id);
     }
+
+    @GetMapping(value = "/client/{id}")
+    public Address findByClientId(@PathVariable Long id) {
+        return addressService.findByClientId(id);
+    }
 }
