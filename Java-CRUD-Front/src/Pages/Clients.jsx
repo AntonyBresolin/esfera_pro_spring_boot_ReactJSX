@@ -5,7 +5,7 @@ import { Cross1Icon, Pencil1Icon, PlusIcon, TrashIcon } from "@radix-ui/react-ic
 import * as Dialog from '@radix-ui/react-dialog';
 
 import { clientCreate, clientUpdate, updateStatusClient } from "../functions/clientsFunctions";
-import { ConfirmationPopup } from "../functions/ConfirmationPopup";
+import { AlertPopup } from "../functions/AlertPopup";
 
 import { Menu }  from "../Layouts/Menu";
 
@@ -48,11 +48,11 @@ contact format:
 export const Clients = () => {
     const initialClients = useLoaderData()
     const [Clients, setClients] = useState(initialClients)
-    const [message, setMessage] = useState("")
     const [functions, setFunctions] = useState( () => {})
     const [open, setOpen] = useState(false)
     const [openC, setOpenC] = useState(false)
     const [openE, setOpenE] = useState(false)
+    const [message, setMessage] = useState("")
     const [client, setClient] = useState({})
 
     const handleRemoveClient = (client) => {
@@ -136,7 +136,7 @@ export const Clients = () => {
             </div>
           ))}
 
-          <ConfirmationPopup open={open} setOpen={setOpen} handleAction={() => functions(client)}  message={message}  />
+          <AlertPopup open={open} setOpen={setOpen} handleAction={() => functions(client)}  message={message} type={"confirmation"}  />
 
 
           {/* Dialog de Edit */}
@@ -256,7 +256,7 @@ function ClientsFields ({client}) {
           <label className="text-gray-900 font-medium">E-mail</label>
           <input
           className="text-gray-600 mt-2 py-1.5 px-2 block w-11/12 rounded-md border border-gray-300 shadow focus:border-purple-contrast focus:text-gray-800"
-          type="text"
+          type="email"
           // defaultValue={}
           name="email"
           required
@@ -350,7 +350,7 @@ function ClientsFields ({client}) {
             <label className="text-gray-900 font-medium">Número</label>
             <input
             className="w-5/6 text-gray-600 mt-2 py-1.5 px-2 block rounded-md border border-gray-300 shadow focus:border-purple-contrast focus:text-gray-800"
-            type="text"
+            type="number"
             // defaultValue={}
             name="number"
             required

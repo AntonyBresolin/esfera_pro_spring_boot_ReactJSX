@@ -5,7 +5,7 @@ import { ReloadIcon, TrashIcon } from "@radix-ui/react-icons";
 
 import { Menu } from "../Layouts/Menu";
 import { clientDelete, updateStatusClient } from "../functions/clientsFunctions";
-import { ConfirmationPopup } from "../functions/ConfirmationPopup";
+import { AlertPopup } from "../functions/AlertPopup";
 
 export const Trashcan = () => {
     const initialClients = useLoaderData()
@@ -87,7 +87,7 @@ export const Trashcan = () => {
                         </div>
                     </div>
                 ))}
-                <ConfirmationPopup open={open} setOpen={setOpen} handleAction={() => functions(client)}  message={message}  />
+                <AlertPopup open={open} setOpen={setOpen} handleAction={() => functions(client)}  message={message} type={"confirmation"}  />
             </div>
         </div>
      );
