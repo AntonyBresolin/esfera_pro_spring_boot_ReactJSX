@@ -1,6 +1,7 @@
 package com.github.antonybresolin.api_spring_boot_esfera.controller;
 
 import com.github.antonybresolin.api_spring_boot_esfera.model.Contact;
+import com.github.antonybresolin.api_spring_boot_esfera.service.ClientService;
 import com.github.antonybresolin.api_spring_boot_esfera.service.ContactService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
@@ -39,9 +40,7 @@ public class ContactController {
     }
 
     @GetMapping(value = "/client/{id}")
-    public List<Contact> findByClientId(@PathVariable Long id) {
-        return contactService.findByClientId(id);
+    public List<Contact> findContactsByClientId(@PathVariable Long id) {
+        return contactService.findContactsByClientId(id);
     }
-
-
 }
