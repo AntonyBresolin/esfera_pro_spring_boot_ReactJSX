@@ -1,4 +1,4 @@
-# esfera_pro_spring_boot_html
+# esfera_pro_spring_boot_ReactJSX
 
 ## Desenvolvimento do projeto esfera pró soluções.
 
