@@ -15,12 +15,15 @@ export const Authenticate = () => {
             return false
      }
     const res = await fetch(`http://localhost:8080/api/user/${data.username}/${data.password}`)
-    const resData = await res.json()
-             if (res.ok) {
-                setAuth({user: resData.name, authenticated: true})
-                localStorage.setItem('authToken', JSON.stringify({user: resData.name, authenticated: true}))
-                return true
-             }
+    console.clear()
+    if (res.ok) {
+        const resData = await res.json()
+        setAuth({user: resData.name, authenticated: true})
+        localStorage.setItem('authToken', JSON.stringify({user: resData.name, authenticated: true}))
+        return true
+    } else {
+        return false
+    }
    }
 
    const logout = () => {
