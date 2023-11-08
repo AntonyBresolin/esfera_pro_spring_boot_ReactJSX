@@ -19,7 +19,6 @@ export const Trashcan = () => {
         setClient(client)
         setMessage(`Você esta prestes a restaurar o cliente ${client.name}.`)
         setFunctions(() => restoreClient)
-        console.log(functions)
         setOpen(true)
     }
 

@@ -23,7 +23,6 @@ address format:
   "neighborhood": "BPK",
   "street": "Rua dos Bobos",
   "number": "69",
-  "complement": "nothing",
   "client": {
       "id": 1,
       "name": "Lucas",
@@ -34,7 +33,6 @@ address format:
 
 contact format:
 {
-  "name": "phone",
   "type": 1,
   "contentContact": "999999999",
   "client": {
