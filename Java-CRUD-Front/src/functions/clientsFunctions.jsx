@@ -1,23 +1,109 @@
+// {
+//   "client": {
+//       "id": 4,
+//       "name": "Lucas",
+//       "cnpj": "123456789",
+//       "status": "Active"
+//   },
+//   "address": {
+//       "id": 1,
+//       "cep": "69966996",
+//       "state": "PR",
+//       "city": "Toledo",
+//       "neighborhood": "BPK",
+//       "street": "Rua dos Bobos",
+//       "number": "69",
+//       "client": {
+//           "id": 4,
+//           "name": "Lucas",
+//           "cnpj": "123456789",
+//           "status": "Active"
+//       }
+//   },
+//   "contacts": [
+//       {
+//           "id": 2,
+//           "type": 1,
+//           "contentContact": "999999999",
+//           "client": {
+//               "id": 4,
+//               "name": "Lucas",
+//               "cnpj": "123456789",
+//               "status": "Active"
+//           }
+//       }
+//   ]
+// }
+
 export const clientsActiveLoader = async () => {
     const res = await fetch('http://localhost:8080/api/client/status/active')
+    const data = await res.json()
+    let clients = []
+    data.map(async (client) => {
+      const id = client.id
+      const allData = await grabData(id)
+      let clientData = {
+        id: allData.client.id,
+        name: allData.client.name,
+        cnpj: allData.client.cnpj,
+        status: allData.client.status
+      }
+      let contactData = {
+          cell: allData.contacts[0].contentContact,
+          email: allData.contacts[1].contentContact
+        }
+      let addressData = {
+        cep: allData.address.cep,
+        state: allData.address.state,
+        city: allData.address.city,
+        neighborhood: allData.address.neighborhood,
+        street: allData.address.street,
+        number: allData.address.number
+      }
+      clients.push({clientData, contactData, addressData})
+    })
 
   if (!res.ok) {
     throw Error('Could not fetch the list of clients')
   }
 
-  return res.json()
-
+  return clients
 }
+
 
 export const clientsInactiveLoader = async () => {
   const res = await fetch('http://localhost:8080/api/client/status/inactive')
+  const data = await res.json()
+  let clients = []
+  data.map(async (client) => {
+    const id = client.id
+    const allData = await grabData(id)
+    let clientData = {
+      id: allData.client.id,
+      name: allData.client.name,
+      cnpj: allData.client.cnpj,
+      status: allData.client.status
+    }
+    let contactData = {
+        cell: allData.contacts[0].contentContact,
+        email: allData.contacts[1].contentContact
+      }
+    let addressData = {
+      cep: allData.address.cep,
+      state: allData.address.state,
+      city: allData.address.city,
+      neighborhood: allData.address.neighborhood,
+      street: allData.address.street,
+      number: allData.address.number
+    }
+    clients.push({clientData, contactData, addressData})
+  })
 
-  if (!res.ok) {
-    throw Error('Could not fetch the list of clients')
-  }
+if (!res.ok) {
+  throw Error('Could not fetch the list of clients')
+}
 
-  return res.json()
-
+return clients
 }
 
 
@@ -180,3 +266,15 @@ export const clientDelete = async (id) => {
   return del.json()
 }
 
+export const grabData = async (id) => {
+  const res = await fetch(`http://localhost:8080/api/client-with-contacts-and-address/${id}`)
+  const data = await res.json()
+  
+  if (!res.ok) {
+    throw Error('Could not fetch the client of id: ' + id)
+  }
+
+  return data
+
+
+}
