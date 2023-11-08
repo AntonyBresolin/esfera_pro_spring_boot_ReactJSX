@@ -1,15 +1,17 @@
-import { useState } from 'react';
-import { DashboardIcon, PersonIcon, TrashIcon } from "@radix-ui/react-icons";
+import { useContext, useState } from 'react';
+import { DashboardIcon, ExitIcon, PersonIcon, TrashIcon } from "@radix-ui/react-icons";
 import { NavLink, useLocation } from "react-router-dom";
 import { HamburgerMenuIcon } from "@radix-ui/react-icons";
+import { AuthContext } from '../Authenticate';
 
 
 export const Menu = () => {
+    const { logout } = useContext(AuthContext)
     const location = useLocation();
     const [activeMenu, setActiveMenu] = useState(location.pathname);
 
     return ( 
-        <aside className="flex flex-col w-16 border-r-2">
+        <aside className="flex flex-col w-16 border-r-2 justify-between">
             <div className="flex flex-col text-purple-contrast max-w-min p-2 gap-2 fixed top-0">
                 <div title='(W.I.P)' className="cursor-pointer p-2 max-w-min rounded-full hover:bg-purple-contrast hover:text-amber">
                     <HamburgerMenuIcon className= "h-6 w-6" />
@@ -25,6 +27,11 @@ export const Menu = () => {
                         <TrashIcon className= "h-6 w-6" />
                     </NavLink>
                 </nav>
+            </div>
+            <div className='p-2 fixed bottom-0'>
+                <NavLink to="/login" onClick={logout} className={`flex gap-2 p-2 rounded-lg cursor-pointer hover:bg-purple-contrast hover:text-amber transition ease-in-out duration-200 `}>
+                    <ExitIcon className= "h-6 w-6" />
+                </NavLink>
             </div>
             
         </aside>
