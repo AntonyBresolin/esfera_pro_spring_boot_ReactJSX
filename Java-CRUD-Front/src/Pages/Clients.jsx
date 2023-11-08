@@ -52,6 +52,7 @@ export const Clients = () => {
       const res = await clientCreate(data)
       setClients(res)
       setOpenC(false)
+
     }
 
     return ( 
