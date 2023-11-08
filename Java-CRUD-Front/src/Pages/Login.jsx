@@ -1,7 +1,13 @@
-import { useState } from "react"
+import { useContext, useEffect, useState } from "react"
 import { AlertPopup } from "../functions/AlertPopup"
+import { AuthContext } from "../Authenticate"
+import { useNavigate } from "react-router-dom"
+
+
 
 export const Login = () => {
+    const navigate = useNavigate() 
+    const useAuth = useContext(AuthContext)
     const message = "Usuário ou senha incorretos"
     const [open, setOpen] = useState(false)
 
@@ -12,13 +18,8 @@ export const Login = () => {
     const handleSubmit = async (e) => {
     e.preventDefault()
     let data = Object.fromEntries(new FormData(e.target))
-    console.log(data)
-    const res = false
-    if (res) {
-        <Navigate to="/" />
-    } else {
-        setOpen(true)
-    }
+    const res = await useAuth.login(data)
+    res ? navigate("/", {replace: true}) : setOpen(true)
     }
 
     return (

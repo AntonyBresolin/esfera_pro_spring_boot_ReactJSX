@@ -1,26 +1,31 @@
-import { createContext, useState } from "react"
+import { createContext, useEffect, useState } from "react"
 import App from "./App"
 
 export const AuthContext = createContext()
 
-export const Authenticate = () => {
-    const [auth, setAuth] = useState({user: '', authenticated: false})
-    
-    const login = (username, password) => {
+export const Authenticate = () => {   
+    const [auth, setAuth] = useState(
+        localStorage.getItem('authToken') 
+        ? JSON.parse(localStorage.getItem('authToken')) 
+        : {user: "", authenticated: false}
+    )
 
-        return new Promise((resolve, reject) => {
-
-             if (password === "password") {
-                  setAuth({user: username, authenticated: true})
-                  resolve("success")
-             } else {
-                  reject("Incorrect username or password")
+    const login = async (data) => {
+     if (data.username === "" || data.password === "") {
+            return false
+     }
+    const res = await fetch(`http://localhost:8080/api/user/${data.username}/${data.password}`)
+    const resData = await res.json()
+             if (res.ok) {
+                setAuth({user: resData.name, authenticated: true})
+                localStorage.setItem('authToken', JSON.stringify({user: resData.name, authenticated: true}))
+                return true
              }
-        }) 
    }
 
    const logout = () => {
-        setAuth({...auth, authenticated: false})
+        localStorage.removeItem('authToken')
+        setAuth({user: "", authenticated: false})
    }
 
     return (
