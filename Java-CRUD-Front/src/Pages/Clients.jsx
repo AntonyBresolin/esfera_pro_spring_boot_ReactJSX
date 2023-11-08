@@ -47,11 +47,11 @@ export const Clients = () => {
       // setOpenE(false)
     }
     const handleSubmitCreate = async (e) => {
-      // e.preventDefault()
-      // let data = Object.fromEntries(new FormData(e.target))
-      // const res = await clientCreate(data, Clients)
-      // setClients(res)
-      // setOpenC(false)
+      e.preventDefault()
+      let data = Object.fromEntries(new FormData(e.target))
+      const res = await clientCreate(data)
+      setClients(res)
+      setOpenC(false)
     }
 
     return ( 
@@ -154,7 +154,7 @@ export const Clients = () => {
                   </div>
     
                   <form onSubmit={handleSubmitCreate}>
-                    <ClientsFields client={client}/>
+                    <ClientsFields client={''}/>
                     <div className="text-right mr-2">
                       <Dialog.Close className="px-6 py-2 mt-6 mb-4 mr-4 border-2 border-black rounded-lg text-lg text-gray-600 hover:text-black transition ease-in-out duration-200">
                         Cancelar
@@ -175,6 +175,26 @@ export const Clients = () => {
 
 
 function ClientsFields ({client}) {
+  if (client === '') {
+    client = {
+      clientData: {
+        name: '',
+        cnpj: ''
+      },
+      contactData: {
+        cell: '',
+        email: ''
+      },
+      addressData: {
+        cep: '',
+        state: '',
+        city: '',
+        neighborhood: '',
+        street: '',
+        number: ''
+      }
+    }
+  }
   return (
     <div className="space-y-6 bg-white p-6">
 

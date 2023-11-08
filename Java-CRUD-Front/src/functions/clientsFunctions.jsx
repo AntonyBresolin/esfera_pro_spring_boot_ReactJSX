@@ -107,31 +107,10 @@ return clients
 }
 
 
-export const clientCreate = async (data, clients) => {
-  const id =clients.length + 1
-  const client = {
-    id: id,
+export const clientCreate = async (data) => {
+  let client = {
     name: data.name,
     cnpj: data.cnpj,
-    status: "Active"
-  }
-  
-  const address = {
-    cep: data.cep,
-    state: data.state,
-    city: data.city,
-    neighborhood: data.neighborhood,
-    street: data.street,
-    number: data.number,
-    complement: "nothing",
-    client
-  }	
-
-  const contact = {
-    name: data.cell,
-    type: 1,
-    contentContact: data.email,
-    client
   }
 
   const c = await fetch('http://localhost:8080/api/client', {
@@ -146,6 +125,28 @@ export const clientCreate = async (data, clients) => {
     throw Error('Could not create the client')
   }
 
+  const dataClients = await fetch('http://localhost:8080/api/client')
+  const clients = await dataClients.json()
+  const id = clients[clients.length - 1].id
+   client = {
+    id: id,
+    name: data.name,
+    cnpj: data.cnpj,
+    status: "Active"
+  }
+  
+  const address = {
+    cep: data.cep,
+    state: data.state,
+    city: data.city,
+    neighborhood: data.neighborhood,
+    street: data.street,
+    number: data.number,
+    client
+  }	
+
+  console.log(address)
+
   const a = await fetch('http://localhost:8080/api/address', {
     method: 'POST',
     headers: {
@@ -158,17 +159,32 @@ export const clientCreate = async (data, clients) => {
     throw Error('Could not create the address')
   }
 
-  const ct = await fetch('http://localhost:8080/api/contact', {
-    method: 'POST',
-    headers: {
-      'Content-type': 'application/json',
+  const contact = [
+    {
+    type: 1,
+    contentContact: data.cell,
+    client
     },
-    body: JSON.stringify(contact),
-  })
+    {
+      type: 2,
+      contentContact: data.email,
+      client
+    }
+  ]
 
-  if (!ct.ok) {
-    throw Error('Could not create the contact')
-  }
+  contact.map(async (eachCt) => {
+    const ct = await fetch('http://localhost:8080/api/contact', {
+      method: 'POST',
+      headers: {
+        'Content-type': 'application/json',
+      },
+      body: JSON.stringify(eachCt),
+    })
+
+    if (!ct.ok) {
+      throw Error('Could not create the contact')
+    }
+  })
 
   return clientsActiveLoader()
 
