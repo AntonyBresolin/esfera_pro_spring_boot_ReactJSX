@@ -1,13 +1,18 @@
+import { useContext } from "react";
 import { Outlet, ScrollRestoration } from "react-router-dom";
+import { AuthContext } from "../Authenticate";
 
 export const DashBoardLayout = () => {
+    const data = useContext(AuthContext)
+    const User = data.auth.user
+
     return ( 
         <div>
             <ScrollRestoration />
             <header className="flex justify-end m-2">
                 <div className="flex flex-row">
                     <div className="w-14 font-body">
-                        <h4 className="font-semibold">User</h4>
+                        <h4 className="font-semibold">{User}</h4>
                         <p className="text-xs">Grupo 1</p>
                     </div>
                     <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" className="w-10 h-10">

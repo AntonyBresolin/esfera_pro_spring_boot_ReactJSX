@@ -14,6 +14,7 @@ export const Authenticate = () => {
     const resData = await res.json()
              if (res.ok) {
                   setAuth({user: resData.name, authenticated: true})
+                  return true
              }
    }
 
