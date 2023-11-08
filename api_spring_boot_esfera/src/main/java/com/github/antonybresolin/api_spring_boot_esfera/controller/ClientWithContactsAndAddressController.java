@@ -66,5 +66,49 @@ public class ClientWithContactsAndAddressController {
             return new ResponseEntity<>("An error occurred", HttpStatus.INTERNAL_SERVER_ERROR);
         }
     }
+
+    @GetMapping(value = "/status/active")
+    public ResponseEntity<?> findActiveClientsWithContactsAndAddress() {
+        try {
+            List<Client> clients = clientService.findByStatusActive();
+            return getResponseEntity(clients);
+        } catch (Exception e) {
+            // Log the exception details here to debug
+            return new ResponseEntity<>("An error occurred", HttpStatus.INTERNAL_SERVER_ERROR);
+        }
+    }
+
+
+
+    @GetMapping(value = "/status/inactive")
+    public ResponseEntity<?> findInactiveClientsWithContactsAndAddress() {
+        try {
+            List<Client> clients = clientService.findByStatusInactive();
+            return getResponseEntity(clients);
+        } catch (Exception e) {
+            // Log the exception details here to debug
+            return new ResponseEntity<>("An error occurred", HttpStatus.INTERNAL_SERVER_ERROR);
+        }
+    }
+
+    private ResponseEntity<?> getResponseEntity(List<Client> clients) {
+        if (clients == null) {
+            return new ResponseEntity<>("Clients not found", HttpStatus.NOT_FOUND);
+        }
+
+        List<Contact> contacts = contactService.findContactsByClientId(clients.get(0).getId());
+        if (contacts == null) {
+            return new ResponseEntity<>("Contacts not found", HttpStatus.NOT_FOUND);
+        }
+
+        Address address = addressService.findAddressByClientId(clients.get(0).getId());
+
+        if (address == null) {
+            return new ResponseEntity<>("Address not found", HttpStatus.NOT_FOUND);
+        }
+
+        ClientWithContactsAndAddress clientWithContactsAndAddress = new ClientWithContactsAndAddress(clients.get(0), address, contacts);
+        return new ResponseEntity<>(clientWithContactsAndAddress, HttpStatus.OK);
+    }
 }
 
