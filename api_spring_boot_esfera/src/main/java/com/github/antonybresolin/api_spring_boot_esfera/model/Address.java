@@ -12,27 +12,27 @@ public class Address {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @Column(name = "cep", nullable = true, length = 100)
+    @Column(name = "cep", nullable = false, length = 100)
     private String cep;
 
-    @Column(name = "state", nullable = true, length = 100)
+    @Column(name = "state", nullable = false, length = 100)
     private String state;
 
-    @Column(name = "city", nullable = true, length = 100)
+    @Column(name = "city", nullable = false, length = 100)
     private String city;
 
-    @Column(name = "neighborhood", nullable = true, length = 100)
+    @Column(name = "neighborhood", nullable = false, length = 100)
     private String neighborhood;
 
-    @Column(name = "street", nullable = true, length = 100)
+    @Column(name = "street", nullable = false, length = 100)
     private String street;
 
-    @Column(name = "number", nullable = true, length = 100)
+    @Column(name = "number", nullable = false, length = 100)
     private String number;
 
 
     @OneToOne
-    @JoinColumn(nullable = false, unique = true)
+    @JoinColumn(nullable = false, unique = false)
     private Client client;
 
 
