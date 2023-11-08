@@ -9,9 +9,9 @@ import { AlertPopup } from "../functions/AlertPopup";
 
 export const Trashcan = () => {
     const initialClients = useLoaderData()
+    const [Clients, setClients] = useState(initialClients) 
     const [message, setMessage] = useState("")
     const [functions, setFunctions] = useState( () => {})
-    const [Clients, setClients] = useState(initialClients) 
     const [client, setClient] = useState({})
     const [open, setOpen] = useState(false)
 
@@ -24,22 +24,22 @@ export const Trashcan = () => {
 
     const restoreClient = (client) => {
         updateStatusClient(client.id, client)
-        const newClients = Clients.filter((c) => c.id !== client.id)
+        const newClients = Clients.filter((c) => c.clientData.id !== client.id)
         setClients(newClients)
     }
 
 
     const handleDeleteClient = (client) => {
-        setClient(client)
-        setMessage(`Você esta prestes a deletar permanentemente o cliente ${client.name}.`)
-        setFunctions(() => deleteClient)
-        setOpen(true)
+        // setClient(client)
+        // setMessage(`Você esta prestes a deletar permanentemente o cliente ${client.name}.`)
+        // setFunctions(() => deleteClient)
+        // setOpen(true)
     }
 
     const deleteClient = (client) => {
-        clientDelete(client.id)
-        const newClients = Clients.filter((c) => c.id !== client.id)
-        setClients(newClients)
+        // clientDelete(client.id)
+        // const newClients = Clients.filter((c) => c.id !== client.id)
+        // setClients(newClients)
     }
 
     return ( 
@@ -62,22 +62,22 @@ export const Trashcan = () => {
               </div>
             </div>
                 {Clients.map(eachClient => (
-                    <div key={eachClient.id} className="border-y grid grid-cols-9 items-center p-3 pl-6">
+                    <div key={eachClient.clientData.id} className="border-y grid grid-cols-9 items-center p-3 pl-6">
                         <div className="flex items-center gap-8 text-lg col-span-2">
                             <input type="checkbox"/>
-                            {eachClient.name}
+                            {eachClient.clientData.name}
                         </div>
                         <div className="col-span-2">
-                            {eachClient.address}
+                            {`${eachClient.addressData.city} - ${eachClient.addressData.state}`}
                         </div>
                         <div className="col-span-2">
-                            {eachClient.contact}
+                            {eachClient.contactData.email}
                         </div>
                         <div className="col-span-2">
-                            {eachClient.cnpj}
+                            {eachClient.clientData.cnpj}
                         </div>
                         <div className="flex justify-evenly">
-                            <div title="Restaurar Cliente" onClick={() => {handleRestoreClient(eachClient)}} className="rounded-full bg-gray-200 p-2 cursor-pointer hover:text-amber hover:bg-purple-contrast hover:scale-110 transition ease-in-out duration-200" >
+                            <div title="Restaurar Cliente" onClick={() => {handleRestoreClient(eachClient.clientData)}} className="rounded-full bg-gray-200 p-2 cursor-pointer hover:text-amber hover:bg-purple-contrast hover:scale-110 transition ease-in-out duration-200" >
                                 <ReloadIcon className="h-4 w-4 block" />
                             </div>
                             <div title="Deletar Cliente(W.I.P)" onClick={() => {handleDeleteClient(eachClient)}} className="rounded-full bg-gray-200 p-2 cursor-pointer hover:text-amber hover:bg-purple-contrast hover:scale-110 transition ease-in-out duration-200" >

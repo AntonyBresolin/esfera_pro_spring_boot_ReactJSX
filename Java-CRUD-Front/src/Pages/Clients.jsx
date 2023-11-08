@@ -9,40 +9,6 @@ import { AlertPopup } from "../functions/AlertPopup";
 
 import { Menu }  from "../Layouts/Menu";
 
-/* 
-client format:
-{
-  "name": "Lucas",
-  "cnpj": "123456789"
-}
-address format:
-{
-  "cep": "69966996",
-  "state": "PR",
-  "city": "Toledo",
-  "neighborhood": "BPK",
-  "street": "Rua dos Bobos",
-  "number": "69",
-  "client": {
-      "id": 1,
-      "name": "Lucas",
-      "cnpj": "123456789",
-      "status": "Active"
-  }
-}
-
-contact format:
-{
-  "type": 1,
-  "contentContact": "999999999",
-  "client": {
-      "id": 1,
-      "name": "Lucas",
-      "cnpj": "123456789",
-      "status": "Active"
-  }
-}
-*/ 
 export const Clients = () => {
     const initialClients = useLoaderData()
     const [Clients, setClients] = useState(initialClients)
@@ -62,30 +28,30 @@ export const Clients = () => {
 
     const removeClient = (client) => {
       updateStatusClient(client.id, client)
-      const newClients = Clients.filter((c) => c.id !== client.id)
+      const newClients = Clients.filter((c) => c.clientData.id !== client.id)
       setClients(newClients)
     }
 
     const handleEditClient = (toEdit) => {
-      setClient(toEdit)
-      setOpenE(true)
+      // setClient(toEdit)
+      // setOpenE(true)
     }
 
 
     // Necessario atualizar a api para saber como sera feito:
     const handleSubmitEdit = async (e) => {
-      e.preventDefault()
-      let data = Object.fromEntries(new FormData(e.target))
-      // const res = await clientUpdate(data, Clients)
-      // setClients(res)
-      setOpenE(false)
+      // e.preventDefault()
+      // let data = Object.fromEntries(new FormData(e.target))
+      // // const res = await clientUpdate(data, Clients)
+      // // setClients(res)
+      // setOpenE(false)
     }
     const handleSubmitCreate = async (e) => {
-      e.preventDefault()
-      let data = Object.fromEntries(new FormData(e.target))
-      const res = await clientCreate(data, Clients)
-      setClients(res)
-      setOpenC(false)
+      // e.preventDefault()
+      // let data = Object.fromEntries(new FormData(e.target))
+      // const res = await clientCreate(data, Clients)
+      // setClients(res)
+      // setOpenC(false)
     }
 
     return ( 
@@ -108,28 +74,27 @@ export const Clients = () => {
               </div>
             </div>
           {Clients.map(eachClient => (
-              <div key={eachClient.id} className="border-y grid grid-cols-9 items-center p-3 pl-6">
+            <div key={eachClient.clientData.id} className="border-y grid grid-cols-9 items-center p-3 pl-6">
               <div className="flex items-center gap-8 text-lg col-span-2">
                 <input type="checkbox"/>
-                {eachClient.name}
+                {eachClient.clientData.name}
               </div>
               <div className="col-span-2">
-                {eachClient.address}
+                {`${eachClient.addressData.city} - ${eachClient.addressData.state}`}
               </div>
               <div className="col-span-2">
-                {eachClient.contact}
+                 {eachClient.contactData.email}
               </div>
               <div className="col-span-2">
-                {eachClient.cnpj}
+                {eachClient.clientData.cnpj}
               </div>
               <div className="flex justify-evenly">
-                <div title="Remover Cliente" onClick={() => {handleRemoveClient(eachClient)}} className="rounded-full bg-gray-200 p-2 cursor-pointer hover:text-amber hover:bg-purple-contrast hover:scale-110 transition ease-in-out duration-200" >
+                <div title="Remover Cliente" onClick={() => {handleRemoveClient(eachClient.clientData)}} className="rounded-full bg-gray-200 p-2 cursor-pointer hover:text-amber hover:bg-purple-contrast hover:scale-110 transition ease-in-out duration-200" >
                   <TrashIcon className="h-4 w-4 block" />
                 </div>
                 <div title="Editar Cliente(W.I.P)" onClick={() => {handleEditClient(eachClient)}} className="rounded-full bg-gray-200 p-2 cursor-pointer hover:text-amber hover:bg-purple-contrast hover:scale-110 transition ease-in-out duration-200">
                   <Pencil1Icon className="h-4 w-4 block" />
                 </div>
-
               </div>
             </div>
           ))}
@@ -221,7 +186,7 @@ function ClientsFields ({client}) {
           autoFocus
           className="text-gray-600 mt-2 py-1.5 px-2 block w-11/12 rounded-md border border-gray-300 shadow focus:border-purple-contrast focus:text-gray-800"
           type="text"
-          defaultValue={client.name}
+          defaultValue={client.clientData.name}
           name="name"
           required
           />
@@ -231,7 +196,7 @@ function ClientsFields ({client}) {
           <input
           className="text-gray-600 mt-2 py-1.5 px-2 block w-11/12 rounded-md border border-gray-300 shadow focus:border-purple-contrast focus:text-gray-800"
           type="text"
-          defaultValue={client.cnpj}
+          defaultValue={client.clientData.cnpj}
           name="cnpj"
           required
           />
@@ -245,7 +210,7 @@ function ClientsFields ({client}) {
           <input
           className="text-gray-600 mt-2 py-1.5 px-2 block w-11/12 rounded-md border border-gray-300 shadow focus:border-purple-contrast focus:text-gray-800"
           type="text"
-          // defaultValue={}
+          defaultValue={client.contactData.cell}
           name="cell"
           required
           />
@@ -255,7 +220,7 @@ function ClientsFields ({client}) {
           <input
           className="text-gray-600 mt-2 py-1.5 px-2 block w-11/12 rounded-md border border-gray-300 shadow focus:border-purple-contrast focus:text-gray-800"
           type="email"
-          // defaultValue={}
+          defaultValue={client.contactData.email}
           name="email"
           required
           />
@@ -270,7 +235,7 @@ function ClientsFields ({client}) {
             <input
             className="w-5/6 text-gray-600 mt-2 py-1.5 px-2 block rounded-md border border-gray-300 shadow focus:border-purple-contrast focus:text-gray-800"
             type="text"
-            // defaultValue={}
+            defaultValue={client.addressData.cep}
             name="cep"
             required
             />
@@ -280,7 +245,7 @@ function ClientsFields ({client}) {
             <input
             className="w-5/6 text-gray-600 mt-2 py-1.5 px-2 block rounded-md border border-gray-300 shadow focus:border-purple-contrast focus:text-gray-800"
             type="text"
-            // defaultValue={}
+            defaultValue={client.addressData.city}
             name="city"
             required
             />
@@ -289,7 +254,7 @@ function ClientsFields ({client}) {
             <label className="text-gray-900 font-medium">Estado</label>
             <select 
             className="w-5/6 text-gray-600 mt-2 py-1.5 px-2 block rounded-md border border-gray-300 shadow" 
-            // defaultValue={}
+            defaultValue={client.addressData.state}
             name="state"
             required
             >
@@ -329,7 +294,7 @@ function ClientsFields ({client}) {
             <input
             className="w-5/6 text-gray-600 mt-2 py-1.5 px-2 block rounded-md border border-gray-300 shadow focus:border-purple-contrast focus:text-gray-800"
             type="text"
-            // defaultValue={}
+            defaultValue={client.addressData.neighborhood}
             name="neighborhood"
             required
             />
@@ -339,7 +304,7 @@ function ClientsFields ({client}) {
             <input
             className="w-5/6 text-gray-600 mt-2 py-1.5 px-2 block rounded-md border border-gray-300 shadow focus:border-purple-contrast focus:text-gray-800"
             type="text"
-            // defaultValue={}
+            defaultValue={client.addressData.street}
             name="street"
             required
             />
@@ -349,7 +314,7 @@ function ClientsFields ({client}) {
             <input
             className="w-5/6 text-gray-600 mt-2 py-1.5 px-2 block rounded-md border border-gray-300 shadow focus:border-purple-contrast focus:text-gray-800"
             type="number"
-            // defaultValue={}
+            defaultValue={client.addressData.number}
             name="number"
             required
             />
