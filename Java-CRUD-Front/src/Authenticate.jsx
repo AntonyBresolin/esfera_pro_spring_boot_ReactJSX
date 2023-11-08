@@ -15,6 +15,7 @@ export const Authenticate = () => {
             return false
      }
     const res = await fetch(`http://localhost:8080/api/user/${data.username}/${data.password}`)
+    console.clear()
     if (res.ok) {
         const resData = await res.json()
         setAuth({user: resData.name, authenticated: true})
