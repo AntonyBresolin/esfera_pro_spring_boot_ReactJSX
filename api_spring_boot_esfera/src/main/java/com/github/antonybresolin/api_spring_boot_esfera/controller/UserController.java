@@ -1,7 +1,6 @@
 package com.github.antonybresolin.api_spring_boot_esfera.controller;
 
 import com.github.antonybresolin.api_spring_boot_esfera.model.User;
-import com.github.antonybresolin.api_spring_boot_esfera.repositories.UserRepository;
 import com.github.antonybresolin.api_spring_boot_esfera.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
