@@ -2,7 +2,8 @@ import { useRouteError } from "react-router-dom"
 import { Menu } from "../../Layouts/Menu"
 
 export const TrashcanError = () => {
-    const error = useRouteError()
+    let error = useRouteError()
+    error = error.message === "Failed to fetch"? "Erro ao buscar clientes, verifique se o servidor está rodando" : error.message 
     return (
         <div className="flex flex-row w-full font-body">
             <Menu />
@@ -22,7 +23,7 @@ export const TrashcanError = () => {
                     CPF/CNPJ
                 </div>
                 </div>
-                <h1 className="text-center text-xl mt-8">{error.message}</h1>
+                <h1 className="text-center text-xl mt-8">{error}</h1>
             </div>
         </div>
     )

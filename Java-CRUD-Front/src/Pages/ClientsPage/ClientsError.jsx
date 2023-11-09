@@ -7,7 +7,7 @@ import { AlertPopup } from "../../Components/AlertPopup"
 import { clientCreate } from "../../functions/clientsFunctions"
 
 export const ClientsError = () => {
-    const error = useRouteError()
+    let error = useRouteError()
     const navigate = useNavigate()
     const [client, setClient] = useState({})
     const [openDialog, setOpenDialog] = useState(false)
@@ -15,6 +15,7 @@ export const ClientsError = () => {
     const [message, setMessage] = useState("")
     const [title, setTitle] = useState("")
     const [functions, setFunctions] = useState(() => {})
+    error = error.message === "Failed to fetch"? "Erro ao buscar clientes, verifique se o servidor está rodando" : error.message 
 
     const handleCreateClient = () => {
         setClient('')
@@ -50,9 +51,9 @@ export const ClientsError = () => {
                     CPF/CNPJ
                 </div>
                 </div>
-                <h1 className="text-center text-xl mt-8">{error.message}</h1>
+                <h1 className="text-center text-xl mt-8">{error}</h1>
             </div>
-            <div title="Adicionar Cliente" onClick={handleCreateClient} className={`${error.message === "Failed to fetch"? "hidden" : "visible"} fixed cursor-pointer bottom-7 right-10 rounded-xl text-white bg-purple-highlight p-2 hover:scale-110 transition ease-in-out duration-200`}>
+            <div title="Adicionar Cliente" onClick={handleCreateClient} className={`${error === "Erro ao buscar clientes, verifique se o servidor está rodando"? "hidden" : "visible"} fixed cursor-pointer bottom-7 right-10 rounded-xl text-white bg-purple-highlight p-2 hover:scale-110 transition ease-in-out duration-200`}>
                 <PlusIcon className=" w-8 h-8 hover:text-amber" />
             </div>
 

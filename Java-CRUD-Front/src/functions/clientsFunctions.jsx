@@ -42,10 +42,10 @@ export const clientsActiveLoader = async () => {
 export const clientsInactiveLoader = async () => {
   const res = await fetch('http://localhost:8080/api/client-with-contacts-and-address/status/inactive')
   if (res.status === 404) {
-    throw Error('Não foram encontrados clientes inativos, verifique se o servidor está rodando')
+    throw Error('Não foram encontrados clientes inativos')
   }
   if (!res.ok) {
-    throw Error('Erro ao buscar clientes')
+    throw Error('Erro ao buscar clientes, verifique se o servidor está rodando')
   }
   const data = await res.json()
   let clients = []
