@@ -59,15 +59,15 @@ export const Clients = () => {
     //Função de remover cliente
     const handleRemoveClient = (client) => {
       setClient(client)
-      setMessage(`Você esta prestes a remover o cliente ${client.name}.`)
+      setMessage(`Você esta prestes a remover o cliente ${client.clientData.name}.`)
       setFunctions(() => removeClient)
       setTitle("confirmation")
       setOpenAlert(true)
     }
 
     const removeClient = (client) => {
-      updateStatusClient(client.id, client)
-      const newClients = Clients.filter((c) => c.clientData.id !== client.id)
+      updateStatusClient(client.clientData.id, client)
+      const newClients = Clients.filter((c) => c.clientData.id !== client.clientData.id)
       setClients(newClients)
     }
 
@@ -174,7 +174,7 @@ export const Clients = () => {
                 {eachClient.clientData.cnpj}
               </div>
               <div onClick={(e) => e.stopPropagation()} className="flex justify-evenly">
-                <div title="Remover Cliente" onClick={() => {handleRemoveClient(eachClient.clientData)}} className="rounded-full bg-gray-200 p-2 cursor-pointer hover:text-amber hover:bg-purple-contrast hover:scale-110 transition ease-in-out duration-200" >
+                <div title="Remover Cliente" onClick={() => {handleRemoveClient(eachClient)}} className="rounded-full bg-gray-200 p-2 cursor-pointer hover:text-amber hover:bg-purple-contrast hover:scale-110 transition ease-in-out duration-200" >
                   <TrashIcon className="h-4 w-4 block" />
                 </div>
                 <div title="Editar Cliente" onClick={() => {handleEditClient(eachClient)}} className="rounded-full bg-gray-200 p-2 cursor-pointer hover:text-amber hover:bg-purple-contrast hover:scale-110 transition ease-in-out duration-200">
