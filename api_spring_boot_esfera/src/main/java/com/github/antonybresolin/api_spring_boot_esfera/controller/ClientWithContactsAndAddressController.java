@@ -122,7 +122,36 @@ public class ClientWithContactsAndAddressController {
             clientsWithContactsAndAddress.add(clientWithContactsAndAddress);
         }
         return new ResponseEntity<>(clientsWithContactsAndAddress, HttpStatus.OK);
+    }
 
+    @PutMapping(value = "/{id}", consumes = MediaType.APPLICATION_JSON_VALUE)
+    public ResponseEntity<?> updateClientWithContactsAndAddressByIdClient(@PathVariable Long id, @RequestBody ClientWithContactsAndAddress clientWithContactsAndAddress) {
+        try {
+            Client client = clientService.findById(id);
+            if (client == null) {
+                return new ResponseEntity<>("Client not found", HttpStatus.NOT_FOUND);
+            }
+
+            List<Contact> contacts = contactService.findContactsByClientId(id);
+            if (contacts == null) {
+                return new ResponseEntity<>("Contacts not found", HttpStatus.NOT_FOUND);
+            }
+
+            Address address = addressService.findAddressByClientId(id);
+
+            if (address == null) {
+                return new ResponseEntity<>("Address not found", HttpStatus.NOT_FOUND);
+            }
+
+            clientService.updateClient(clientWithContactsAndAddress.getClient());
+            addressService.updateAddress(clientWithContactsAndAddress.getAddress());
+            contactService.updateContacts(clientWithContactsAndAddress.getContacts());
+
+            return new ResponseEntity<>(HttpStatus.OK);
+        } catch (Exception e) {
+            // Log the exception details here to debug
+            return new ResponseEntity<>("An error occurred", HttpStatus.INTERNAL_SERVER_ERROR);
+        }
     }
 }
 
