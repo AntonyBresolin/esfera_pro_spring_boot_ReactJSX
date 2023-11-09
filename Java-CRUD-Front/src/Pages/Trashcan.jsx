@@ -5,7 +5,7 @@ import { ReloadIcon, TrashIcon } from "@radix-ui/react-icons";
 
 import { Menu } from "../Layouts/Menu";
 import { clientDelete, updateStatusClient } from "../functions/clientsFunctions";
-import { AlertPopup } from "../functions/AlertPopup";
+import { AlertPopup } from "../Components/AlertPopup";
 
 export const Trashcan = () => {
     const initialClients = useLoaderData()

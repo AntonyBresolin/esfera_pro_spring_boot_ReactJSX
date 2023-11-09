@@ -1,5 +1,5 @@
 import { useContext, useState } from "react"
-import { AlertPopup } from "../functions/AlertPopup"
+import { AlertPopup } from "../Components/AlertPopup"
 import { AuthContext } from "../Authenticate"
 import { useNavigate } from "react-router-dom"
 

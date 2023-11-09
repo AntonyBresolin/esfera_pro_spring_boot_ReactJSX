@@ -5,7 +5,7 @@ import { Cross1Icon, Pencil1Icon, PlusIcon, TrashIcon } from "@radix-ui/react-ic
 import * as Dialog from '@radix-ui/react-dialog';
 
 import { clientCreate, clientUpdate, updateStatusClient } from "../functions/clientsFunctions";
-import { AlertPopup } from "../functions/AlertPopup";
+import { AlertPopup } from "../Components/AlertPopup";
 
 import { Menu }  from "../Layouts/Menu";
 
