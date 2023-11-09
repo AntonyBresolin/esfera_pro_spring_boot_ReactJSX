@@ -6,15 +6,28 @@ import { ReloadIcon, TrashIcon } from "@radix-ui/react-icons";
 import { Menu } from "../Layouts/Menu";
 import { clientDelete, updateStatusClient } from "../functions/clientsFunctions";
 import { AlertPopup } from "../Components/AlertPopup";
+import { DialogPopup } from "../Components/DialogPopup";
 
 export const Trashcan = () => {
     const initialClients = useLoaderData()
-    const [Clients, setClients] = useState(initialClients) 
+    const [Clients, setClients] = useState(initialClients)
+    const [title, setTitle] = useState("")
     const [message, setMessage] = useState("")
+    const [openDialog, setOpenDialog] = useState(false)
     const [functions, setFunctions] = useState( () => {})
     const [client, setClient] = useState({})
     const [open, setOpen] = useState(false)
 
+
+    //Função de detalhes do cliente
+    const handleDetailsClient = (client) => {
+        setClient(client)
+        setTitle("details")
+        setFunctions(() => () => {setOpenDialog(false)})
+        setOpenDialog(true)
+    }
+
+    //Função de restaurar cliente
     const handleRestoreClient = (client) => {
         setClient(client)
         setMessage(`Você esta prestes a restaurar o cliente ${client.name}.`)
@@ -28,7 +41,7 @@ export const Trashcan = () => {
         setClients(newClients)
     }
 
-
+    //Função de deletar cliente
     const handleDeleteClient = (client) => {
         setClient(client)
         setMessage(`Você esta prestes a deletar permanentemente o cliente ${client.name}.`)
@@ -61,7 +74,7 @@ export const Trashcan = () => {
               </div>
             </div>
                 {Clients.map(eachClient => (
-                    <div key={eachClient.clientData.id} className="border-y grid grid-cols-9 items-center p-3 pl-6">
+                    <div onClick={() => {handleDetailsClient(eachClient)}} key={eachClient.clientData.id} className="border-y grid grid-cols-9 items-center p-3 pl-6">
                         <div className="flex items-center gap-8 text-lg col-span-2">
                             <input type="checkbox"/>
                             {eachClient.clientData.name}
@@ -75,7 +88,7 @@ export const Trashcan = () => {
                         <div className="col-span-2">
                             {eachClient.clientData.cnpj}
                         </div>
-                        <div className="flex justify-evenly">
+                        <div onClick={(e) => e.stopPropagation()} className="flex justify-evenly">
                             <div title="Restaurar Cliente" onClick={() => {handleRestoreClient(eachClient.clientData)}} className="rounded-full bg-gray-200 p-2 cursor-pointer hover:text-amber hover:bg-purple-contrast hover:scale-110 transition ease-in-out duration-200" >
                                 <ReloadIcon className="h-4 w-4 block" />
                             </div>
@@ -85,6 +98,7 @@ export const Trashcan = () => {
                         </div>
                     </div>
                 ))}
+                <DialogPopup open={openDialog} setOpen={setOpenDialog} handleSubmit={functions} client={client} type={title} />
                 <AlertPopup open={open} setOpen={setOpen} handleAction={() => functions(client)}  message={message} type={"confirmation"}  />
             </div>
         </div>

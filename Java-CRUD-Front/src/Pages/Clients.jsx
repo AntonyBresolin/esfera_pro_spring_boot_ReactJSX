@@ -18,6 +18,15 @@ export const Clients = () => {
     const [message, setMessage] = useState("")
     const [client, setClient] = useState({})
     const [title, setTitle] = useState("")
+
+    //Função de detalhes do cliente
+    const handleDetailsClient = (client) => {
+      setClient(client)
+      setTitle("details")
+      setFunctions(() => () => {setOpenDialog(false)})
+      setOpenDialog(true)
+    }
+
     
     //Função de remover cliente
     const handleRemoveClient = (client) => {
@@ -44,7 +53,6 @@ export const Clients = () => {
     }
 
     const handleSubmitEdit = async (e, client) => {
-      e.preventDefault()
       const data = Object.fromEntries(new FormData(e.target))
       const res = await clientUpdate(data, client)
       setClients(res)
@@ -63,7 +71,6 @@ export const Clients = () => {
     }
 
     const handleSubmitCreate = async (e) => {
-      e.preventDefault()
       let data = Object.fromEntries(new FormData(e.target))
       const res = await clientCreate(data)
       setClients(res)
@@ -93,7 +100,7 @@ export const Clients = () => {
               </div>
             </div>
           {Clients.map(eachClient => (
-            <div key={eachClient.clientData.id} className="border-y grid grid-cols-9 items-center p-3 pl-6">
+            <div onClick={() => {handleDetailsClient(eachClient)}} key={eachClient.clientData.id} className="border-y grid grid-cols-9 items-center p-3 pl-6">
               <div className="flex items-center gap-8 text-lg col-span-2">
                 <input type="checkbox"/>
                 {eachClient.clientData.name}
@@ -107,7 +114,7 @@ export const Clients = () => {
               <div className="col-span-2">
                 {eachClient.clientData.cnpj}
               </div>
-              <div className="flex justify-evenly">
+              <div onClick={(e) => e.stopPropagation()} className="flex justify-evenly">
                 <div title="Remover Cliente" onClick={() => {handleRemoveClient(eachClient.clientData)}} className="rounded-full bg-gray-200 p-2 cursor-pointer hover:text-amber hover:bg-purple-contrast hover:scale-110 transition ease-in-out duration-200" >
                   <TrashIcon className="h-4 w-4 block" />
                 </div>
