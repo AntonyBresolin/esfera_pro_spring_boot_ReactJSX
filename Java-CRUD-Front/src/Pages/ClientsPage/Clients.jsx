@@ -3,11 +3,11 @@ import { useLoaderData } from "react-router-dom";
 
 import { Pencil1Icon, PlusIcon, TrashIcon } from "@radix-ui/react-icons";
 
-import { clientCreate, clientUpdate, updateStatusClient } from "../functions/clientsFunctions";
-import { DialogPopup } from "../Components/DialogPopup";
-import { AlertPopup } from "../Components/AlertPopup";
+import { clientCreate, clientUpdate, clientsActiveLoader, updateStatusClient } from "../../functions/clientsFunctions";
+import { DialogPopup } from "../../Components/DialogPopup";
+import { AlertPopup } from "../../Components/AlertPopup";
 
-import { Menu }  from "../Layouts/Menu";
+import { Menu }  from "../../Layouts/Menu";
 
 export const Clients = () => {
     const initialClients = useLoaderData()
@@ -73,7 +73,7 @@ export const Clients = () => {
     const handleSubmitCreate = async (e) => {
       let data = Object.fromEntries(new FormData(e.target))
       const res = await clientCreate(data)
-      setClients(res)
+      setClients(clientsActiveLoader())
       setMessage(`Cliente ${data.name} criado com sucesso!`)
       setFunctions(() => () => {setOpenAlert(false)})
       setTitle("success")
@@ -84,7 +84,7 @@ export const Clients = () => {
       <div className="flex flex-row w-full font-body">
         <Menu />
         <div className="w-full h-full pb-44">
-        <div className="border-y grid grid-cols-9  items-center p-3 pl-6 bg-gray-100 text-gray-600">
+          <div className="border-y grid grid-cols-9  items-center p-3 pl-6 bg-gray-100 text-gray-600">
               <div className="flex items-center gap-8 text-lg col-span-2">
                 <input type="checkbox"/>
                 Nome

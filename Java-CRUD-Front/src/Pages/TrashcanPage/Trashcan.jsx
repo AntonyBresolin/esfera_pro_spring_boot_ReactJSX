@@ -3,10 +3,10 @@ import { useLoaderData } from "react-router-dom";
 
 import { ReloadIcon, TrashIcon } from "@radix-ui/react-icons";
 
-import { Menu } from "../Layouts/Menu";
-import { clientDelete, updateStatusClient } from "../functions/clientsFunctions";
-import { AlertPopup } from "../Components/AlertPopup";
-import { DialogPopup } from "../Components/DialogPopup";
+import { Menu } from "../../Layouts/Menu";
+import { clientDelete, updateStatusClient } from "../../functions/clientsFunctions";
+import { AlertPopup } from "../../Components/AlertPopup";
+import { DialogPopup } from "../../Components/DialogPopup";
 
 export const Trashcan = () => {
     const initialClients = useLoaderData()

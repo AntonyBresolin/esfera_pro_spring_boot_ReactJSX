@@ -1,7 +1,10 @@
 export const clientsActiveLoader = async () => {
   const res = await fetch('http://localhost:8080/api/client-with-contacts-and-address/status/active')
+  if (res.status === 404) {
+    throw Error('Não foram encontrados clientes ativos')
+  }
   if (!res.ok) {
-    throw Error('Could not fetch the list of clients')
+    throw Error('Erro ao buscar clientes, verifique se o servidor está rodando')
   }
   const data = await res.json()
   let clients = []
@@ -38,8 +41,11 @@ export const clientsActiveLoader = async () => {
 
 export const clientsInactiveLoader = async () => {
   const res = await fetch('http://localhost:8080/api/client-with-contacts-and-address/status/inactive')
+  if (res.status === 404) {
+    throw Error('Não foram encontrados clientes inativos, verifique se o servidor está rodando')
+  }
   if (!res.ok) {
-    throw Error('Could not fetch the list of clients')
+    throw Error('Erro ao buscar clientes')
   }
   const data = await res.json()
   let clients = []
@@ -91,7 +97,7 @@ export const clientCreate = async (data) => {
   })
 
   if (!c.ok) {
-    throw Error('Could not create the client')
+    throw Error('Não foi possivel criar o cliente')
   }
 
   const dataClients = await fetch('http://localhost:8080/api/client')
@@ -123,7 +129,7 @@ export const clientCreate = async (data) => {
   })
 
   if (!a.ok) {
-    throw Error('Could not create the address')
+    throw Error('Não foi possivel criar o endereço')
   }
 
   const contact = [
@@ -149,11 +155,11 @@ export const clientCreate = async (data) => {
     })
 
     if (!ct.ok) {
-      throw Error('Could not create the contact')
+      throw Error('Não foi possivel criar o contato')
     }
   })
 
-  return clientsActiveLoader()
+  return true
 
 }
 
@@ -207,7 +213,7 @@ export const clientUpdate = async (data, originData) => {
   })
 
   if (!upd.ok) {
-    throw Error('Could not update the client')
+    throw Error('Não foi possivel atualizar o cliente')
   }
 
   return clientsActiveLoader()
@@ -224,7 +230,7 @@ const upd = await fetch(`http://localhost:8080/api/client/${id}/status/${client.
 })
 
 if (!upd.ok) {
-  throw Error('Could not update the status of the client')
+  throw Error('Não foi possivel atualizar o status do cliente')
 }
 
 return upd.json()
@@ -238,7 +244,7 @@ export const clientDelete = async (id) => {
   }) 
 
   if (!del.ok) {
-    throw Error('Could not delete the client')
+    throw Error('Não foi possivel deletar o cliente')
   }
 
   return clientsInactiveLoader()
