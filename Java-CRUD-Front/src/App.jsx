@@ -10,10 +10,12 @@ import { clientsActiveLoader, clientsInactiveLoader } from "./functions/clientsF
 import { DashBoardLayout } from "./Layouts/DashBoardLayout";
 
 // pages
-import { Clients } from "./Pages/Clients";
-import { Trashcan } from "./Pages/Trashcan";
 import { ProtectedRoutes } from "./ProtectedRoutes";
 import { Login } from "./Pages/Login";
+import { Clients } from "./Pages/ClientsPage/Clients";
+import { ClientsError } from "./Pages/ClientsPage/ClientsError";
+import { Trashcan } from "./Pages/TrashcanPage/Trashcan";
+import { TrashcanError } from "./Pages/TrashcanPage/TrashcanError";
 import { NotFound } from "./Pages/NotFound";
 
 const router = createBrowserRouter([
@@ -24,8 +26,8 @@ const router = createBrowserRouter([
         path: '/',
         Component: DashBoardLayout,
         children: [
-          {path: '/', Component: Clients, loader: clientsActiveLoader},
-          {path: 'trashcan', Component: Trashcan, loader: clientsInactiveLoader},
+          {path: '/', Component: Clients, loader: clientsActiveLoader, errorElement: <ClientsError/>},
+          {path: 'trashcan', Component: Trashcan, loader: clientsInactiveLoader, errorElement: <TrashcanError/>},
         ],
       }
     ]

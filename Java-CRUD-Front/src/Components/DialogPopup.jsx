@@ -37,7 +37,7 @@ export const DialogPopup = ({open, setOpen, handleSubmit, client, type}) => {
             </div>
 
             <form onSubmit={submit}>
-              <fieldset disabled={true} className='group'>
+              <fieldset disabled={type === "details"? true : false} className='group'>
                 <ClientsFields client={client}/>
                 <div className="text-right mr-2">
                   <Dialog.Close className={`${type === "details"? "hidden" : "visible"} px-6 py-2 mt-6 mb-4 mr-4 border-2 border-black rounded-lg text-lg text-gray-600 hover:text-black transition ease-in-out duration-200`}>
