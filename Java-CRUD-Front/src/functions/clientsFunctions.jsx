@@ -6,6 +6,8 @@ export const clientsActiveLoader = async () => {
   const data = await res.json()
   let clients = []
   data.map( (eachClient) => {
+    let cell = eachClient.contacts.filter((contact) => contact.type == 1)
+    let email = eachClient.contacts.filter((contact) => contact.type == 2)
     let clientData = {
       id: eachClient.client.id,
       name: eachClient.client.name,
@@ -13,11 +15,11 @@ export const clientsActiveLoader = async () => {
       status: eachClient.client.status
     }
     let contactData = {
-        idCell: eachClient.contacts[0].id,
-        cell: eachClient.contacts[0].contentContact,
-        idEmail: eachClient.contacts[1].id,
-        email: eachClient.contacts[1].contentContact
-      }
+        idCell: cell[0].id,
+        cell: cell[0].contentContact,
+        idEmail: email[0].id,
+        email: email[0].contentContact
+    }
     let addressData = {
       id: eachClient.address.id,
       cep: eachClient.address.cep,
@@ -42,6 +44,8 @@ export const clientsInactiveLoader = async () => {
   const data = await res.json()
   let clients = []
   data.map( (eachClient) => {
+    let cell = eachClient.contacts.filter((contact) => contact.type == 1)
+    let email = eachClient.contacts.filter((contact) => contact.type == 2)
     let clientData = {
       id: eachClient.client.id,
       name: eachClient.client.name,
@@ -49,11 +53,11 @@ export const clientsInactiveLoader = async () => {
       status: eachClient.client.status
     }
     let contactData = {
-        idCell: eachClient.contacts[0].id,
-        cell: eachClient.contacts[0].contentContact,
-        idEmail: eachClient.contacts[1].id,
-        email: eachClient.contacts[1].contentContact
-      }
+        idCell: cell[0].id,
+        cell: cell[0].contentContact,
+        idEmail: email[0].id,
+        email: email[0].contentContact
+    }
     let addressData = {
       id: eachClient.address.id,
       cep: eachClient.address.cep,
@@ -72,83 +76,84 @@ return clients
 
 
 export const clientCreate = async (data) => {
-let client = {
-  name: data.name,
-  cnpj: data.cnpj,
-}
 
-const c = await fetch('http://localhost:8080/api/client', {
-  method: 'POST',
-  headers: {
-    'Content-type': 'application/json',
-  },
-  body: JSON.stringify(client),
-})
-
-if (!c.ok) {
-  throw Error('Could not create the client')
-}
-
-const dataClients = await fetch('http://localhost:8080/api/client')
-const clients = await dataClients.json()
-const id = clients[clients.length - 1].id
- client = {
-  id: id,
-  name: data.name,
-  cnpj: data.cnpj,
-  status: "Active"
-}
-
-const address = {
-  cep: data.cep,
-  state: data.state,
-  city: data.city,
-  neighborhood: data.neighborhood,
-  street: data.street,
-  number: data.number,
-  client
-}	
-
-const a = await fetch('http://localhost:8080/api/address', {
-  method: 'POST',
-  headers: {
-    'Content-type': 'application/json',
-  },
-  body: JSON.stringify(address),
-})
-
-if (!a.ok) {
-  throw Error('Could not create the address')
-}
-
-const contact = [
-  {
-  type: 1,
-  contentContact: data.cell,
-  client
-  },
-  {
-    type: 2,
-    contentContact: data.email,
-    client
+  let client = {
+    name: data.name,
+    cnpj: data.cnpj,
   }
-]
 
-contact.map(async (eachCt) => {
-  const ct = await fetch('http://localhost:8080/api/contact', {
+  const c = await fetch('http://localhost:8080/api/client', {
     method: 'POST',
     headers: {
       'Content-type': 'application/json',
     },
-    body: JSON.stringify(eachCt),
+    body: JSON.stringify(client),
   })
 
-  if (!ct.ok) {
-    throw Error('Could not create the contact')
+  if (!c.ok) {
+    throw Error('Could not create the client')
   }
-})
 
-return clientsActiveLoader()
+  const dataClients = await fetch('http://localhost:8080/api/client')
+  const clients = await dataClients.json()
+  const id = clients[clients.length - 1].id
+  client = {
+    id: id,
+    name: data.name,
+    cnpj: data.cnpj,
+    status: "Active"
+  }
+
+  const address = {
+    cep: data.cep,
+    state: data.state,
+    city: data.city,
+    neighborhood: data.neighborhood,
+    street: data.street,
+    number: data.number,
+    client
+  }	
+
+  const a = await fetch('http://localhost:8080/api/address', {
+    method: 'POST',
+    headers: {
+      'Content-type': 'application/json',
+    },
+    body: JSON.stringify(address),
+  })
+
+  if (!a.ok) {
+    throw Error('Could not create the address')
+  }
+
+  const contact = [
+    {
+    type: 1,
+    contentContact: data.cell,
+    client
+    },
+    {
+      type: 2,
+      contentContact: data.email,
+      client
+    }
+  ]
+
+  contact.map(async (eachCt) => {
+    const ct = await fetch('http://localhost:8080/api/contact', {
+      method: 'POST',
+      headers: {
+        'Content-type': 'application/json',
+      },
+      body: JSON.stringify(eachCt),
+    })
+
+    if (!ct.ok) {
+      throw Error('Could not create the contact')
+    }
+  })
+
+  return clientsActiveLoader()
 
 }
 
