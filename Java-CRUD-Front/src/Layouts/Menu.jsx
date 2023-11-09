@@ -9,19 +9,23 @@ export const Menu = () => {
     const { logout } = useContext(AuthContext)
     const location = useLocation();
     const [activeMenu, setActiveMenu] = useState(location.pathname);
+    const [openMenu, setOpenMenu] = useState(false);
+
 
     return ( 
-        <aside className="flex flex-col w-16 border-r-2 justify-between">
+        <aside className={`flex flex-col border-r-2 justify-between ${openMenu? "w-36" : "w-16"}`}>
             <div className="flex flex-col text-purple-contrast max-w-min p-2 gap-2 fixed top-0">
-                <div title='Abri Menu(W.I.P)' className="cursor-pointer p-2 max-w-min rounded-full hover:bg-purple-contrast hover:text-amber">
+                <div title='Abri Menu' onClick={() => {openMenu? setOpenMenu(false) : setOpenMenu(true) }} className="cursor-pointer p-2 max-w-min rounded-full hover:bg-purple-contrast hover:text-amber">
                     <HamburgerMenuIcon className= "h-6 w-6" />
                 </div>
                 <nav className="flex flex-col space-y-2">
                     <NavLink title='Clientes' to="/" onClick={() => setActiveMenu('/')} className={`flex gap-2 p-2 rounded-lg cursor-pointer transition ease-in-out duration-200 ${activeMenu === '/' ? 'bg-purple-contrast text-amber' : 'hover:bg-purple-contrast hover:text-amber'}`}>
                         <PersonIcon className= "h-6 w-6" />
+                        <h1 className={`select-none ${openMenu ? "visible" : "hidden"}`}>Clientes</h1>
                     </NavLink>
-                    <NavLink title='Trashcan' to="/trashcan" onClick={() => setActiveMenu('/trashcan')} className={`flex gap-2 p-2 rounded-lg cursor-pointer transition ease-in-out duration-200 ${activeMenu === '/trashcan' ? 'bg-purple-contrast text-amber' : 'hover:bg-purple-contrast hover:text-amber'}`}>
+                    <NavLink title='Lixeira' to="/trashcan" onClick={() => setActiveMenu('/trashcan')} className={`flex gap-2 p-2 rounded-lg cursor-pointer transition ease-in-out duration-200 ${activeMenu === '/trashcan' ? 'bg-purple-contrast text-amber' : 'hover:bg-purple-contrast hover:text-amber'}`}>
                         <TrashIcon className= "h-6 w-6" />
+                        <h1 className={`select-none ${openMenu ? "visible" : "hidden"}`}>Lixeira</h1>
                     </NavLink>
                 </nav>
             </div>
