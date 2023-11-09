@@ -21,6 +21,7 @@ public class Client {
     @Column(name = "status", nullable = true, length = 14)
     private String status;
 
+
     public Client() {
         this.status = "Active";
     }

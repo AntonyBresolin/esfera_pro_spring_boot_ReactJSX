@@ -30,16 +30,15 @@ export const Trashcan = () => {
 
 
     const handleDeleteClient = (client) => {
-        // setClient(client)
-        // setMessage(`Você esta prestes a deletar permanentemente o cliente ${client.name}.`)
-        // setFunctions(() => deleteClient)
-        // setOpen(true)
+        setClient(client)
+        setMessage(`Você esta prestes a deletar permanentemente o cliente ${client.name}.`)
+        setFunctions(() => deleteClient)
+        setOpen(true)
     }
 
-    const deleteClient = (client) => {
-        // clientDelete(client.id)
-        // const newClients = Clients.filter((c) => c.id !== client.id)
-        // setClients(newClients)
+    const deleteClient = async (client) => {
+        const newClients = await clientDelete(client.id)
+        setClients(newClients)
     }
 
     return ( 
@@ -80,7 +79,7 @@ export const Trashcan = () => {
                             <div title="Restaurar Cliente" onClick={() => {handleRestoreClient(eachClient.clientData)}} className="rounded-full bg-gray-200 p-2 cursor-pointer hover:text-amber hover:bg-purple-contrast hover:scale-110 transition ease-in-out duration-200" >
                                 <ReloadIcon className="h-4 w-4 block" />
                             </div>
-                            <div title="Deletar Cliente(W.I.P)" onClick={() => {handleDeleteClient(eachClient)}} className="rounded-full bg-gray-200 p-2 cursor-pointer hover:text-amber hover:bg-purple-contrast hover:scale-110 transition ease-in-out duration-200" >
+                            <div title="Deletar Cliente(W.I.P)" onClick={() => {handleDeleteClient(eachClient.clientData)}} className="rounded-full bg-gray-200 p-2 cursor-pointer hover:text-amber hover:bg-purple-contrast hover:scale-110 transition ease-in-out duration-200" >
                                 <TrashIcon className="h-4 w-4 block" />
                             </div>                            
                         </div>
