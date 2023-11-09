@@ -12,7 +12,10 @@ export const DialogPopup = ({open, setOpen, handleSubmit, client, type}) => {
         title = "Detalhes do cliente"
     }
 
+    let save = type === "details" ? "Ok" : "Salvar"
+
     const submit = async (e) => {
+      e.preventDefault()
       await handleSubmit(e, client)
       setOpen(false)
     }
@@ -34,15 +37,17 @@ export const DialogPopup = ({open, setOpen, handleSubmit, client, type}) => {
             </div>
 
             <form onSubmit={submit}>
-              <ClientsFields client={client}/>
-              <div className="text-right mr-2">
-                <Dialog.Close className="px-6 py-2 mt-6 mb-4 mr-4 border-2 border-black rounded-lg text-lg text-gray-600 hover:text-black transition ease-in-out duration-200">
-                  Cancelar
-                </Dialog.Close>
-                <button  className="bg-purple-highlight px-9 py-2 mt-6 mb-4 mr-4 border-2 border-purple-highlight rounded-lg text-lg font-semibold hover:text-amber hover:scale-105 transition ease-in-out duration-200">
-                  Save
-                </button>
-              </div>
+              <fieldset disabled={true} className='group'>
+                <ClientsFields client={client}/>
+                <div className="text-right mr-2">
+                  <Dialog.Close className={`${type === "details"? "hidden" : "visible"} px-6 py-2 mt-6 mb-4 mr-4 border-2 border-black rounded-lg text-lg text-gray-600 hover:text-black transition ease-in-out duration-200`}>
+                    Cancelar
+                  </Dialog.Close>
+                  <button  className="bg-purple-highlight px-9 py-2 mt-6 mb-4 mr-4 border-2 border-purple-highlight rounded-lg text-lg font-semibold hover:text-amber hover:scale-105 transition ease-in-out duration-200">
+                    {save}
+                  </button>
+                </div>
+              </fieldset>
             </form>
           </Dialog.Content>
         </Dialog.Portal>
