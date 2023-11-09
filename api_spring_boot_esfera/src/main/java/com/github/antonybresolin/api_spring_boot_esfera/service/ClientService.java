@@ -61,4 +61,9 @@ public class ClientService {
         return contactRepository.findByClientId(clientId);
     }
 
+    public Client updateClient(Client client) {
+        return clientRepository.save(client);
+    }
+
+
 }

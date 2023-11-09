@@ -45,4 +45,8 @@ public class ContactService {
         contactRepository.deleteContactsByClientId(id);
     }
 
+    public List<Contact> updateContacts(List<Contact> contacts) {
+        return contactRepository.saveAll(contacts);
+    }
+
 }

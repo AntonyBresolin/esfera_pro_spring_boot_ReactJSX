@@ -32,7 +32,7 @@ public class Address {
 
 
     @OneToOne
-    @JoinColumn(nullable = false, unique = false)
+    @JoinColumn(nullable = false, unique = true)
     private Client client;
 
 
