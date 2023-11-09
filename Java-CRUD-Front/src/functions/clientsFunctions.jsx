@@ -193,7 +193,6 @@ export const clientUpdate = async (data, originData) => {
     contacts,
     address
   }
-  console.log(allData)
   const upd = await fetch(`http://localhost:8080/api/client-with-contacts-and-address/${originData.clientData.id}`, {
     method: 'PUT',
     headers: {
