@@ -15,9 +15,9 @@ export const Trashcan = () => {
     const [title, setTitle] = useState("")
     const [message, setMessage] = useState("")
     const [openDialog, setOpenDialog] = useState(false)
+    const [openAlert, setOpenAlert] = useState(false)
     const [functions, setFunctions] = useState( () => {})
     const [client, setClient] = useState({})
-    const [open, setOpen] = useState(false)
 
     //Função de selecionar cliente
     const checkboxHandler = (e) => {
@@ -35,7 +35,7 @@ export const Trashcan = () => {
         }
       }
     
-      const checkAllHandler = () => {
+    const checkAllHandler = () => {
         if( Clients.length === selectedClients.length ){
           setSelectedClients( [] )
         }else{
@@ -59,7 +59,8 @@ export const Trashcan = () => {
         setClient(client)
         setMessage(`Você esta prestes a restaurar o cliente ${client.name}.`)
         setFunctions(() => restoreClient)
-        setOpen(true)
+        setTitle("confirmation")
+        setOpenAlert(true)
     }
 
     const restoreClient = (client) => {
@@ -72,11 +73,13 @@ export const Trashcan = () => {
         if (selectedClients.length === 0){
             setMessage(`Você não selecionou nenhum cliente.`)
             setFunctions(() => () => {setOpenDialog(false)})
-            setOpen(true)
+            setTitle("error")
+            setOpenAlert(true)
         } else {
             setMessage(`Você esta prestes a restaurar ${selectedClients.length} clientes.`)
             setFunctions(() => multipleRestoreClient)
-            setOpen(true)
+            setTitle("confirmation")
+            setOpenAlert(true)
         }
     }
 
@@ -87,6 +90,7 @@ export const Trashcan = () => {
         })
         const newClients = Clients.filter((c) => !selectedClients.includes(c.clientData.id))
         setClients(newClients)
+        setSelectedClients([])
     }
 
     //Função de deletar cliente
@@ -94,7 +98,8 @@ export const Trashcan = () => {
         setClient(client)
         setMessage(`Você esta prestes a deletar permanentemente o cliente ${client.name}.`)
         setFunctions(() => deleteClient)
-        setOpen(true)
+        setTitle("confirmation")
+        setOpenAlert(true)
     }
 
     const deleteClient = async (client) => {
@@ -105,12 +110,14 @@ export const Trashcan = () => {
     const handleMultipleDeleteClient = () => {
         if (selectedClients.length === 0){
             setMessage(`Você não selecionou nenhum cliente.`)
-            setFunctions(() => () => {setOpenDialog(false)})
-            setOpen(true)
+            setFunctions(() => () => {setOpenAlert(false)})
+            setTitle("error")
+            setOpenAlert(true)
         } else {
             setMessage(`Você esta prestes a deletar permanentemente ${selectedClients.length} clientes.`)
             setFunctions(() => multipleDeleteClient)
-            setOpen(true)
+            setTitle("confirmation")
+            setOpenAlert(true)
         }
     }
 
@@ -120,6 +127,7 @@ export const Trashcan = () => {
         })
         const newClients = Clients.filter((c) => !selectedClients.includes(c.clientData.id))
         setClients(newClients)
+        setSelectedClients([])
     }
 
     return ( 
@@ -179,7 +187,7 @@ export const Trashcan = () => {
                     </div>
                 ))}
                 <DialogPopup open={openDialog} setOpen={setOpenDialog} handleSubmit={functions} client={client} type={title} />
-                <AlertPopup open={open} setOpen={setOpen} handleAction={() => functions(client)}  message={message} type={"confirmation"}  />
+                <AlertPopup open={openAlert} setOpen={setOpenAlert} handleAction={() => functions(client)}  message={message} type={title}  />
             </div>
         </div>
      );
