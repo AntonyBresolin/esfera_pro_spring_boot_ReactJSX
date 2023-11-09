@@ -7,6 +7,8 @@ export const AlertPopup = ({open, setOpen, handleAction, message, type}) => {
         title = "Você tem certeza?"
     } else if (type === "error") {
         title = "Erro!"
+    } else if (type === "success") {
+        title = "Sucesso!"
     }
 
 
@@ -23,8 +25,8 @@ return (
                 <AlertDialog.Description className="text-lg text-gray-500 py-3 px-6 text-center">
                     {message}
                 </AlertDialog.Description>
-                <div className='flex justify-end space-x-4 p-4 pr-8'>
-                    <AlertDialog.Cancel className="text-sm text-gray-500 border-2 border-gray-200 hover:text-gray-700 hover:border-gray-600 transition ease-in-out duration-200 px-4 py-2 rounded-lg">
+                <div className='flex justify-center space-x-4 p-4 pr-8'>
+                    <AlertDialog.Cancel className={`${title === "Sucesso!" || title === "Erro!"? "hidden" : "visible"} text-sm text-gray-500 border-2 border-gray-200 hover:text-gray-700 hover:border-gray-600 transition ease-in-out duration-200 px-4 py-2 rounded-lg`}>
                         Cancelar
                     </AlertDialog.Cancel>
                     <AlertDialog.Action onClick={() => handleAction()} className="text-sm text-white rounded-lg border-2 border-purple-highlight px-4 py-2 hover:text-amber bg-purple-highlight hover:scale-105 transition ease-in-out duration-200">

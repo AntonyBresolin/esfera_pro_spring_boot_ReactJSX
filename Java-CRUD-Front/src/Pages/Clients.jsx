@@ -18,12 +18,13 @@ export const Clients = () => {
     const [openE, setOpenE] = useState(false)
     const [message, setMessage] = useState("")
     const [client, setClient] = useState({})
-
+    const [title, setTitle] = useState("")
     //Função de remover cliente
     const handleRemoveClient = (client) => {
       setClient(client)
       setMessage(`Você esta prestes a remover o cliente ${client.name}.`)
       setFunctions(() => removeClient)
+      setTitle("confirmation")
       setOpen(true)
     }
 
@@ -45,6 +46,10 @@ export const Clients = () => {
       const res = await clientUpdate(data, client)
       setClients(res)
       setOpenE(false)
+      setMessage(`Cliente ${data.name} editado com sucesso!`)
+      setFunctions(() => () => {setOpen(false)})
+      setTitle("success")
+      setOpen(true)
     }
 
     //Função de criar cliente
@@ -54,7 +59,10 @@ export const Clients = () => {
       const res = await clientCreate(data)
       setClients(res)
       setOpenC(false)
-
+      setMessage(`Cliente ${data.name} criado com sucesso!`)
+      setFunctions(() => () => {setOpen(false)})
+      setTitle("success")
+      setOpen(true)
     }
 
     return ( 
@@ -102,7 +110,7 @@ export const Clients = () => {
             </div>
           ))}
 
-          <AlertPopup open={open} setOpen={setOpen} handleAction={() => functions(client)}  message={message} type={"confirmation"}  />
+          <AlertPopup open={open} setOpen={setOpen} handleAction={() => functions(client)}  message={message} type={title}  />
 
 
           {/* Dialog de Edit */}
