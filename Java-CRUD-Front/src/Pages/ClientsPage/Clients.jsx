@@ -12,12 +12,40 @@ import { Menu }  from "../../Layouts/Menu";
 export const Clients = () => {
     const initialClients = useLoaderData()
     const [Clients, setClients] = useState(initialClients)
+    const [selectedClients, setSelectedClients] = useState([])
     const [functions, setFunctions] = useState( () => {})
     const [openAlert, setOpenAlert] = useState(false)
     const [openDialog, setOpenDialog] = useState(false)
     const [message, setMessage] = useState("")
     const [client, setClient] = useState({})
     const [title, setTitle] = useState("")
+
+    //Função de selecionar cliente
+    const checkboxHandler = (e) => {
+      let isSelected = e.target.checked;
+      let value = parseInt(e.target.value);
+  
+      if( isSelected ){
+        setSelectedClients( [...selectedClients, value ] )
+      }else{
+        setSelectedClients((prevData)=>{
+          return prevData.filter((id)=>{
+            return id !== value
+          })
+        })
+      }
+    }
+  
+    const checkAllHandler = () => {
+      if( Clients.length === selectedClients.length ){
+        setSelectedClients( [] )
+      }else{
+        const selectedIds = Clients.map((eachClient)=>{
+          return eachClient.clientData.id
+        })
+        setSelectedClients( selectedIds )
+      }
+    }
 
     //Função de detalhes do cliente
     const handleDetailsClient = (client) => {
@@ -41,6 +69,30 @@ export const Clients = () => {
       updateStatusClient(client.id, client)
       const newClients = Clients.filter((c) => c.clientData.id !== client.id)
       setClients(newClients)
+    }
+
+    const handleMultipleRemoveClient = () => {
+      if (selectedClients.length === 0){
+        setMessage(`Você não selecionou nenhum cliente.`)
+        setFunctions(() => () => {setOpenAlert(false)})
+        setTitle("error")
+        setOpenAlert(true)
+    } else {
+        setMessage(`Você esta prestes a restaurar ${selectedClients.length} clientes.`)
+        setFunctions(() => multipleRemoveClient)
+        setTitle("confirmation")
+        setOpenAlert(true)
+    }
+    }
+
+    const multipleRemoveClient = () => {
+      selectedClients.map((id) => {
+        const client = Clients.filter((c) => c.clientData.id === id)
+        updateStatusClient(id, client[0])
+      })
+      const newClients = Clients.filter((c) => !selectedClients.includes(c.clientData.id))
+      setClients(newClients)
+      setSelectedClients([])
     }
 
     //Função de editar cliente
@@ -84,31 +136,38 @@ export const Clients = () => {
       <div className="flex flex-row w-full font-body">
         <Menu />
         <div className="w-full h-full pb-44">
-          <div className="border-y grid grid-cols-9  items-center p-3 pl-6 bg-gray-100 text-gray-600">
-              <div className="flex items-center gap-8 text-lg col-span-2">
-                <input type="checkbox"/>
-                Nome
-              </div>
-              <div className="col-span-2">
-                Endereço
-              </div>
-              <div className="col-span-2">
-                Contato
-              </div>
-              <div className="col-span-2">
-                CPF/CNPJ
-              </div>
+          <div className="border-y grid grid-cols-12  items-center p-3 pl-6 bg-gray-100 text-gray-600">
+            <div className="flex items-center gap-8 text-lg col-span-1">
+              <input type="checkbox" onClick={checkAllHandler} className="w-4 h-4"/>
             </div>
-          {Clients.map(eachClient => (
-            <div onClick={() => {handleDetailsClient(eachClient)}} key={eachClient.clientData.id} className="border-y grid grid-cols-9 items-center p-3 pl-6">
-              <div className="flex items-center gap-8 text-lg col-span-2">
-                <input type="checkbox"/>
-                {eachClient.clientData.name}
+            <div className="flex items-center text-lg col-span-3">
+                Nome
+            </div>
+            <div className="col-span-2">
+              Endereço
+            </div>
+            <div className="col-span-3">
+              Contato
+            </div>
+            <div className="col-span-2">
+              CPF/CNPJ
+            </div>
+            <div title="Remover clientes selecionados" onClick={handleMultipleRemoveClient} className="flex rounded-full bg-gray-200 p-2 cursor-pointer item-center justify-center hover:text-amber hover:bg-purple-contrast hover:scale-110 transition ease-in-out duration-200" >
+                  <TrashIcon className="h-4 w-4 block" />
+            </div>
+          </div>
+          {Clients.map((eachClient, index) => (
+            <div onClick={() => {handleDetailsClient(eachClient)}} key={index} className="border-y grid grid-cols-12 items-center p-3 pl-6">
+              <label onClick={(e) => e.stopPropagation()} className="flex items-center text-lg col-span-1">
+                <input type="checkbox" checked={ selectedClients.includes( eachClient.clientData.id ) } value={eachClient.clientData.id} onChange={checkboxHandler} className="w-4 h-4"/>
+              </label>
+              <div className="flex items-center text-lg col-span-3">
+                  {eachClient.clientData.name}
               </div>
               <div className="col-span-2">
                 {`${eachClient.addressData.city} - ${eachClient.addressData.state}`}
               </div>
-              <div className="col-span-2">
+              <div className="col-span-3">
                  {eachClient.contactData.email}
               </div>
               <div className="col-span-2">

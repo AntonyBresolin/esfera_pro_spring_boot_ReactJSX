@@ -221,7 +221,7 @@ export const clientUpdate = async (data, originData) => {
 
 
 export const updateStatusClient = async (id, client) => {
-const upd = await fetch(`http://localhost:8080/api/client/${id}/status/${client.status === "Active" ? "inactive" : "active"}`, {
+const upd = await fetch(`http://localhost:8080/api/client/${id}/status/${client.clientData.status === "Active" ? "inactive" : "active"}`, {
   method: 'PUT',
   headers: {
     'Content-type': 'application/json',

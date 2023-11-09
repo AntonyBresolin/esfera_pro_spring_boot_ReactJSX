@@ -30,7 +30,7 @@ return (
                         Cancelar
                     </AlertDialog.Cancel>
                     <AlertDialog.Action onClick={() => handleAction()} className="text-sm text-white rounded-lg border-2 border-purple-highlight px-4 py-2 hover:text-amber bg-purple-highlight hover:scale-105 transition ease-in-out duration-200">
-                        Confirmar
+                        {type === "confirmation" ? "Confirmar" : "Ok"}
                     </AlertDialog.Action>
                 </div>
             </AlertDialog.Content>
