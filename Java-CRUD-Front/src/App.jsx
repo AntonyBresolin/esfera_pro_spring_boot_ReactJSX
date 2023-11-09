@@ -10,7 +10,6 @@ import { clientsActiveLoader, clientsInactiveLoader } from "./functions/clientsF
 import { DashBoardLayout } from "./Layouts/DashBoardLayout";
 
 // pages
-import { DashBoard } from "./Pages/DashBoard";
 import { Clients } from "./Pages/Clients";
 import { Trashcan } from "./Pages/Trashcan";
 import { ProtectedRoutes } from "./ProtectedRoutes";
@@ -24,8 +23,7 @@ const router = createBrowserRouter([
         path: '/',
         Component: DashBoardLayout,
         children: [
-          {path: '/', Component: DashBoard},
-          {path: 'clients', Component: Clients, loader: clientsActiveLoader},
+          {path: '/', Component: Clients, loader: clientsActiveLoader},
           {path: 'trashcan', Component: Trashcan, loader: clientsInactiveLoader},
         ],
       }
