@@ -19,6 +19,7 @@ export const Clients = () => {
     const [message, setMessage] = useState("")
     const [client, setClient] = useState({})
 
+    //Função de remover cliente
     const handleRemoveClient = (client) => {
       setClient(client)
       setMessage(`Você esta prestes a remover o cliente ${client.name}.`)
@@ -32,20 +33,21 @@ export const Clients = () => {
       setClients(newClients)
     }
 
+    //Função de editar cliente
     const handleEditClient = (toEdit) => {
-      // setClient(toEdit)
-      // setOpenE(true)
+      setClient(toEdit)
+      setOpenE(true)
     }
 
-
-    // Necessario atualizar a api para saber como sera feito:
     const handleSubmitEdit = async (e) => {
-      // e.preventDefault()
-      // let data = Object.fromEntries(new FormData(e.target))
-      // // const res = await clientUpdate(data, Clients)
-      // // setClients(res)
-      // setOpenE(false)
+      e.preventDefault()
+      const data = Object.fromEntries(new FormData(e.target))
+      const res = await clientUpdate(data, client)
+      setClients(res)
+      setOpenE(false)
     }
+
+    //Função de criar cliente
     const handleSubmitCreate = async (e) => {
       e.preventDefault()
       let data = Object.fromEntries(new FormData(e.target))
