@@ -57,15 +57,15 @@ export const Trashcan = () => {
     //Função de restaurar cliente
     const handleRestoreClient = (client) => {
         setClient(client)
-        setMessage(`Você esta prestes a restaurar o cliente ${client.name}.`)
+        setMessage(`Você esta prestes a restaurar o cliente ${client.clientData.name}.`)
         setFunctions(() => restoreClient)
         setTitle("confirmation")
         setOpenAlert(true)
     }
 
     const restoreClient = (client) => {
-        updateStatusClient(client.id, client)
-        const newClients = Clients.filter((c) => c.clientData.id !== client.id)
+        updateStatusClient(client.clientData.id, client)
+        const newClients = Clients.filter((c) => c.clientData.id !== client.clientData.id)
         setClients(newClients)
     }
 
@@ -177,7 +177,7 @@ export const Trashcan = () => {
                             {eachClient.clientData.cnpj}
                         </div>
                         <div onClick={(e) => e.stopPropagation()} className="flex justify-evenly">
-                            <div title="Restaurar Cliente" onClick={() => {handleRestoreClient(eachClient.clientData)}} className="rounded-full bg-gray-200 p-2 cursor-pointer hover:text-amber hover:bg-purple-contrast hover:scale-110 transition ease-in-out duration-200" >
+                            <div title="Restaurar Cliente" onClick={() => {handleRestoreClient(eachClient)}} className="rounded-full bg-gray-200 p-2 cursor-pointer hover:text-amber hover:bg-purple-contrast hover:scale-110 transition ease-in-out duration-200" >
                                 <ReloadIcon className="h-4 w-4 block" />
                             </div>
                             <div title="Deletar Cliente" onClick={() => {handleDeleteClient(eachClient.clientData)}} className="rounded-full bg-gray-200 p-2 cursor-pointer hover:text-amber hover:bg-purple-contrast hover:scale-110 transition ease-in-out duration-200" >
