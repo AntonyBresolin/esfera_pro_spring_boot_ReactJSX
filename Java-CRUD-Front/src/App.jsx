@@ -14,6 +14,7 @@ import { Clients } from "./Pages/Clients";
 import { Trashcan } from "./Pages/Trashcan";
 import { ProtectedRoutes } from "./ProtectedRoutes";
 import { Login } from "./Pages/Login";
+import { NotFound } from "./Pages/NotFound";
 
 const router = createBrowserRouter([
   {
@@ -30,6 +31,7 @@ const router = createBrowserRouter([
     ]
   },
   {path: 'login', Component: Login},
+  {path: '*', Component: NotFound},
 ]);
 
 

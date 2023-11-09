@@ -1,12 +1,13 @@
 import { useContext, useState } from "react"
 import { AlertPopup } from "../Components/AlertPopup"
 import { AuthContext } from "../Authenticate"
-import { useNavigate } from "react-router-dom"
+import { useLocation, useNavigate } from "react-router-dom"
 
 
 
 export const Login = () => {
     const navigate = useNavigate() 
+    const location = useLocation()
     const useAuth = useContext(AuthContext)
     const message = "Usuário ou senha incorretos"
     const [open, setOpen] = useState(false)
@@ -16,10 +17,13 @@ export const Login = () => {
     }
 
     const handleSubmit = async (e) => {
-    e.preventDefault()
-    let data = Object.fromEntries(new FormData(e.target))
-    const res = await useAuth.login(data)
-    res ? navigate("/", {replace: true}) : setOpen(true)
+        e.preventDefault()
+        let data = Object.fromEntries(new FormData(e.target))
+        const res = await useAuth.login(data)
+        res ? navigate("/", {replace: true}) : setOpen(true)
+        if (location.state?.from) {
+            navigate(location.state.from);
+        }
     }
 
     return (

@@ -11,8 +11,8 @@ export const DashBoardLayout = () => {
             <ScrollRestoration />
             <header className="flex justify-end m-2">
                 <div className="flex flex-row">
-                    <div className="w-14 font-body">
-                        <h4 className="font-semibold">{User}</h4>
+                    <div className=" font-body text-center">
+                        <h4 className="font-semibold">{User !== '' ? User : "Usuário"}</h4>
                         <p className="text-xs">Grupo 1</p>
                     </div>
                     <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" className="w-10 h-10">
