@@ -12,12 +12,40 @@ import { Menu }  from "../../Layouts/Menu";
 export const Clients = () => {
     const initialClients = useLoaderData()
     const [Clients, setClients] = useState(initialClients)
+    const [selectedClients, setSelectedClients] = useState([])
     const [functions, setFunctions] = useState( () => {})
     const [openAlert, setOpenAlert] = useState(false)
     const [openDialog, setOpenDialog] = useState(false)
     const [message, setMessage] = useState("")
     const [client, setClient] = useState({})
     const [title, setTitle] = useState("")
+
+    //Função de selecionar cliente
+    const checkboxHandler = (e) => {
+      let isSelected = e.target.checked;
+      let value = parseInt(e.target.value);
+  
+      if( isSelected ){
+        setSelectedClients( [...selectedClients, value ] )
+      }else{
+        setSelectedClients((prevData)=>{
+          return prevData.filter((id)=>{
+            return id !== value
+          })
+        })
+      }
+    }
+  
+    const checkAllHandler = () => {
+      if( Clients.length === selectedClients.length ){
+        setSelectedClients( [] )
+      }else{
+        const selectedIds = Clients.map((eachClient)=>{
+          return eachClient.clientData.id
+        })
+        setSelectedClients( selectedIds )
+      }
+    }
 
     //Função de detalhes do cliente
     const handleDetailsClient = (client) => {
@@ -84,31 +112,35 @@ export const Clients = () => {
       <div className="flex flex-row w-full font-body">
         <Menu />
         <div className="w-full h-full pb-44">
-          <div className="border-y grid grid-cols-9  items-center p-3 pl-6 bg-gray-100 text-gray-600">
-              <div className="flex items-center gap-8 text-lg col-span-2">
-                <input type="checkbox"/>
-                Nome
-              </div>
-              <div className="col-span-2">
-                Endereço
-              </div>
-              <div className="col-span-2">
-                Contato
-              </div>
-              <div className="col-span-2">
-                CPF/CNPJ
-              </div>
+          <div className="border-y grid grid-cols-12  items-center p-3 pl-6 bg-gray-100 text-gray-600">
+            <div className="flex items-center gap-8 text-lg col-span-1">
+              <input type="checkbox" onClick={checkAllHandler}/>
             </div>
-          {Clients.map(eachClient => (
-            <div onClick={() => {handleDetailsClient(eachClient)}} key={eachClient.clientData.id} className="border-y grid grid-cols-9 items-center p-3 pl-6">
-              <div className="flex items-center gap-8 text-lg col-span-2">
-                <input type="checkbox"/>
-                {eachClient.clientData.name}
+            <div className="flex items-center text-lg col-span-3">
+                Nome
+            </div>
+            <div className="col-span-2">
+              Endereço
+            </div>
+            <div className="col-span-3">
+              Contato
+            </div>
+            <div className="col-span-2">
+              CPF/CNPJ
+            </div>
+          </div>
+          {Clients.map((eachClient, index) => (
+            <div onClick={() => {handleDetailsClient(eachClient)}} key={index} className="border-y grid grid-cols-12 items-center p-3 pl-6">
+              <label onClick={(e) => e.stopPropagation()} className="flex items-center text-lg col-span-1">
+                <input type="checkbox" checked={ selectedClients.includes( eachClient.clientData.id ) } value={eachClient.clientData.id} onChange={checkboxHandler}/>
+              </label>
+              <div className="flex items-center text-lg col-span-3">
+                  {eachClient.clientData.name}
               </div>
               <div className="col-span-2">
                 {`${eachClient.addressData.city} - ${eachClient.addressData.state}`}
               </div>
-              <div className="col-span-2">
+              <div className="col-span-3">
                  {eachClient.contactData.email}
               </div>
               <div className="col-span-2">
