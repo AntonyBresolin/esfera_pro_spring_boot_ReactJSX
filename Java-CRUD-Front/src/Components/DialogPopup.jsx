@@ -1,61 +1,73 @@
 import * as Dialog from '@radix-ui/react-dialog';
+
+// Icones
 import { Cross1Icon } from '@radix-ui/react-icons';
 
 
 export const DialogPopup = ({open, setOpen, handleSubmit, client, type}) => {
-    let title = ""
-    if (type === "create") {
-        title = "Cadastrar cliente"
-    } else if (type === "edit") {
-        title = "Editar cliente"
-    } else if (type === "details") {
-        title = "Detalhes do cliente"
-    }
+    
+  // Define o titulo do dialog com base no tipo informado 
+  let title = ""
+  if (type === "create") {
+      title = "Cadastrar cliente"
+  } else if (type === "edit") {
+      title = "Editar cliente"
+  } else if (type === "details") {
+      title = "Detalhes do cliente"
+  }
 
-    let save = type === "details" ? "Ok" : "Salvar"
+  // Função para fechar o dialog e realizar a função de submit
+  const submit = async (e) => {
+    e.preventDefault()
+    await handleSubmit(e, client)
+    setOpen(false)
+  }
 
-    const submit = async (e) => {
-      e.preventDefault()
-      await handleSubmit(e, client)
-      setOpen(false)
-    }
+  return (
+    <Dialog.Root open={open} onOpenChange={setOpen}>
+      <Dialog.Portal>
 
-    return (
-        <Dialog.Root open={open} onOpenChange={setOpen}>
-        <Dialog.Portal>
-          <Dialog.Overlay className="fixed inset-0 bg-black/50 data-[state=open]:animate-[overlay-show_200ms] data-[state=closed]:animate-[overlay-hide_200ms]"/>
-          <Dialog.Content className="fixed top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 rounded-lg bg-white
-        text-white shadow w-full max-w-2xl overflow-hidden data-[state=open]:animate-[dialog-show_200ms] data-[state=closed]:animate-[dialog-hide_200ms] ">
+        // Fundo do dialog
+        <Dialog.Overlay className="fixed inset-0 bg-black/50 data-[state=open]:animate-[overlay-show_200ms] data-[state=closed]:animate-[overlay-hide_200ms]"/>
 
-            <div className="flex items-center justify-between p-6 bg-purple-contrast">
-              <Dialog.Title
-                className="text-xl font-semibold">{title}
-              </Dialog.Title>
-              <Dialog.Close>
-                <Cross1Icon className="w-6 h-6 hover:text-amber"/>
+        // Conteudo do dialog
+        <Dialog.Content className="fixed top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 rounded-lg bg-white text-white shadow w-full max-w-2xl overflow-hidden data-[state=open]:animate-[dialog-show_200ms] data-[state=closed]:animate-[dialog-hide_200ms] ">
+          <div className="flex items-center justify-between p-6 bg-purple-contrast">
+            <Dialog.Title
+              className="text-xl font-semibold">{title}
+            </Dialog.Title>
+
+            <Dialog.Close>
+              <Cross1Icon className="w-6 h-6 hover:text-amber"/>
+            </Dialog.Close>
+          </div>
+
+          <form onSubmit={submit}>
+
+            // Campos do dialog com verificação do tipo para desativar os campos se necessário
+            <fieldset disabled={type === "details"? true : false} className='group'>
+              <ClientsFields client={client}/>
+            </fieldset>
+
+            <div className="text-right mr-2">
+              <Dialog.Close className={`${type === "details"? "hidden" : "visible"} px-6 py-2 mt-6 mb-4 mr-4 border-2 border-black rounded-lg text-lg text-gray-600 hover:text-black transition ease-in-out duration-200`}>
+                Cancelar
               </Dialog.Close>
+              
+              <button  className="bg-purple-highlight px-9 py-2 mt-6 mb-4 mr-4 border-2 border-purple-highlight rounded-lg text-lg font-semibold hover:text-amber hover:scale-105 transition ease-in-out duration-200">
+                {type === "details" ? "Ok" : "Salvar"}
+              </button>
             </div>
-
-            <form onSubmit={submit}>
-              <fieldset disabled={type === "details"? true : false} className='group'>
-                <ClientsFields client={client}/>
-                <div className="text-right mr-2">
-                  <Dialog.Close className={`${type === "details"? "hidden" : "visible"} px-6 py-2 mt-6 mb-4 mr-4 border-2 border-black rounded-lg text-lg text-gray-600 hover:text-black transition ease-in-out duration-200`}>
-                    Cancelar
-                  </Dialog.Close>
-                  <button  className="bg-purple-highlight px-9 py-2 mt-6 mb-4 mr-4 border-2 border-purple-highlight rounded-lg text-lg font-semibold hover:text-amber hover:scale-105 transition ease-in-out duration-200">
-                    {save}
-                  </button>
-                </div>
-              </fieldset>
-            </form>
-          </Dialog.Content>
-        </Dialog.Portal>
-      </Dialog.Root>
-    )
+          </form>
+        </Dialog.Content>
+      </Dialog.Portal>
+    </Dialog.Root>
+  )
 }
 
 function ClientsFields ({client}) {
+
+  // Verifica se o cliente é vazio, se for, define os valores como vazio
   if (client === '') {
     client = {
       clientData: {
@@ -76,9 +88,10 @@ function ClientsFields ({client}) {
       }
     }
   }
+
   return (
     <div className="space-y-6 bg-white p-6">
-
+      
       <h1 className="text-black text-xl font-semibold">Dados básicos</h1>
       <div className="flex justify-evenly">
         <div className="w-full">
@@ -186,7 +199,7 @@ function ClientsFields ({client}) {
               <option value="SP">São Paulo</option>
               <option value="SE">Sergipe</option>
               <option value="TO">Tocantins</option>
-          </select>
+            </select>
           </div>
         </div>
         <div className="flex">
