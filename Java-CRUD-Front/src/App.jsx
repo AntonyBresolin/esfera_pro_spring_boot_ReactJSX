@@ -1,30 +1,29 @@
-import {
-  createBrowserRouter,
-  RouterProvider,
-} from "react-router-dom";
+// Rotas
+import { createBrowserRouter, RouterProvider } from "react-router-dom";
 
-// functions
-import { clientsActiveLoader, clientsInactiveLoader } from "./functions/clientsFunctions";
+// Funções
+import { clientsActiveLoader, clientsInactiveLoader } from "./functions/clientsDataFunctions";
 
-// layouts
-import { DashBoardLayout } from "./Layouts/DashBoardLayout";
+// Layout geral
+import { RootLayout } from "./Layouts/RootLayout";
 
-// pages
-import { ProtectedRoutes } from "./ProtectedRoutes";
-import { Login } from "./Pages/Login";
-import { Clients } from "./Pages/ClientsPage/Clients";
+// Paginas
+import { TrashcanError } from "./Pages/TrashcanPage/TrashcanError";
 import { ClientsError } from "./Pages/ClientsPage/ClientsError";
 import { Trashcan } from "./Pages/TrashcanPage/Trashcan";
-import { TrashcanError } from "./Pages/TrashcanPage/TrashcanError";
+import { Clients } from "./Pages/ClientsPage/Clients";
+import { ProtectedRoutes } from "./ProtectedRoutes";
 import { NotFound } from "./Pages/NotFound";
+import { Login } from "./Pages/Login";
 
 const router = createBrowserRouter([
   {
+    // Rotas protegidas
     Component: ProtectedRoutes,
     children: [
       {
         path: '/',
-        Component: DashBoardLayout,
+        Component: RootLayout,
         children: [
           {path: '/', Component: Clients, loader: clientsActiveLoader, errorElement: <ClientsError/>},
           {path: 'trashcan', Component: Trashcan, loader: clientsInactiveLoader, errorElement: <TrashcanError/>},
@@ -32,6 +31,7 @@ const router = createBrowserRouter([
       }
     ]
   },
+  // Rotas não protegidas
   {path: 'login', Component: Login},
   {path: '*', Component: NotFound},
 ]);

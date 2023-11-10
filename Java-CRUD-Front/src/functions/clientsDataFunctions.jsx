@@ -1,44 +1,56 @@
 export const clientsActiveLoader = async () => {
-  const res = await fetch('http://localhost:8080/api/client-with-contacts-and-address/status/active')
-  if (res.status === 404) {
-    throw Error('Não foram encontrados clientes ativos')
-  }
-  if (!res.ok) {
-    throw Error('Erro ao buscar clientes, verifique se o servidor está rodando')
-  }
-  const data = await res.json()
-  let clients = []
-  data.map((eachClient) => {
-    let cell = eachClient.contacts.filter((contact) => contact.type === 1)
-    let email = eachClient.contacts.filter((contact) => contact.type === 2)
-    let clientData = {
-      id: eachClient.client.id,
-      name: eachClient.client.name,
-      cnpj: eachClient.client.cnpj,
-      status: eachClient.client.status
+    const res = await fetch('http://localhost:8080/api/client-with-contacts-and-address/status/active')
+    if (res.status === 404) {
+      throw Error('Não foram encontrados clientes ativos')
     }
-    let contactData =  {
-        idCell: cell[0].id,
-        cell: cell[0].contentContact,
-        idEmail: email[0].id,
-        email: email[0].contentContact
+    if (!res.ok) {
+      throw Error('Erro ao buscar clientes, verifique se o servidor está rodando')
     }
-    let addressData = {
-      id: eachClient.address.id,
-      cep: eachClient.address.cep,
-      state: eachClient.address.state,
-      city: eachClient.address.city,
-      neighborhood: eachClient.address.neighborhood,
-      street: eachClient.address.street,
-      number: eachClient.address.number
-    }
-    clients.push({clientData, contactData, addressData})
-  })
-  
-  
-  return clients
-}
+    const data = await res.json()
+    let clients = []
+    data.map((eachClient) => {
+      let cell = eachClient.contacts.filter((contact) => contact.type === 1)
+      let email = eachClient.contacts.filter((contact) => contact.type === 2)
+      let clientData = {
+        id: eachClient.client.id,
+        name: eachClient.client.name,
+        cnpj: eachClient.client.cnpj,
+        status: eachClient.client.status
+      }
+      let contactData =  {
+          idCell: cell[0].id,
+          cell: cell[0].contentContact,
+          idEmail: email[0].id,
+          email: email[0].contentContact
+      }
+      let addressData = {
+        id: eachClient.address.id,
+        cep: eachClient.address.cep,
+        state: eachClient.address.state,
+        city: eachClient.address.city,
+        neighborhood: eachClient.address.neighborhood,
+        street: eachClient.address.street,
+        number: eachClient.address.number
+      }
+      clients.push({clientData, contactData, addressData})
+    })
+    
+    clients.sort((a, b) => {
+      const nomeA = a.clientData.name.toUpperCase()
+      const nomeB = b.clientData.name.toUpperCase()
 
+      if (nomeA < nomeB) {
+        return -1
+      }
+      if (nomeA > nomeB) {
+        return 1
+      }
+      return 0
+    })
+    
+    return clients
+  }
+  
 export const clientsInactiveLoader = async () => {
   const res = await fetch('http://localhost:8080/api/client-with-contacts-and-address/status/inactive')
   if (res.status === 404) {
@@ -76,11 +88,23 @@ export const clientsInactiveLoader = async () => {
   clients.push({clientData, contactData, addressData})
 })
 
+clients.sort((a, b) => {
+  const nomeA = a.clientData.name.toUpperCase()
+  const nomeB = b.clientData.name.toUpperCase()
+
+  if (nomeA < nomeB) {
+    return -1
+  }
+  if (nomeA > nomeB) {
+    return 1
+  }
+  return 0
+})
 
 return clients
 }
-
-
+  
+  
 export const clientCreate = async (data) => {
 
   let client = {
@@ -185,7 +209,6 @@ export const clientUpdate = async (data, originData) => {
     }
   ]
   
-
   let address = {
         id: originData.addressData.id,
         cep: data.cep,
@@ -215,12 +238,20 @@ export const clientUpdate = async (data, originData) => {
     throw Error('Não foi possivel atualizar o cliente')
   }
 
-  return clientsActiveLoader()
+  return {
+    clientData: client, 
+    contactData: {
+    idCell: originData.contactData.idCell,
+    cell: data.cell,
+    idEmail: originData.contactData.idEmail,
+    email: data.email
+    }, 
+    addressData: address
+  }
 }
 
 
 export const updateStatusClient = async (id, client) => {
-  console.log(client)
 const upd = await fetch(`http://localhost:8080/api/client/${id}/status/${client.clientData.status === "Active" ? "inactive" : "active"}`, {
   method: 'PUT',
   headers: {
@@ -228,12 +259,11 @@ const upd = await fetch(`http://localhost:8080/api/client/${id}/status/${client.
   },
   body: JSON.stringify(client),
 })
-
 if (!upd.ok) {
   throw Error('Não foi possivel atualizar o status do cliente')
 }
 
-return upd.json()
+return true
 
 }
 
@@ -247,6 +277,6 @@ export const clientDelete = async (id) => {
     throw Error('Não foi possivel deletar o cliente')
   }
 
-  return clientsInactiveLoader()
+  return true
 
 }
