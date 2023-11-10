@@ -7,6 +7,7 @@ export const clientsActiveLoader = async () => {
       throw Error('Erro ao buscar clientes, verifique se o servidor está rodando')
     }
     const data = await res.json()
+    console.log(data)
     let clients = []
     data.map((eachClient) => {
       let cell = eachClient.contacts.filter((contact) => contact.type === 1)
@@ -126,6 +127,7 @@ export const clientCreate = async (data) => {
 
   const dataClients = await fetch('http://localhost:8080/api/client')
   const clients = await dataClients.json()
+
   const id = clients[clients.length - 1].id
   client = {
     id: id,
@@ -144,18 +146,6 @@ export const clientCreate = async (data) => {
     client
   }	
 
-  const a = await fetch('http://localhost:8080/api/address', {
-    method: 'POST',
-    headers: {
-      'Content-type': 'application/json',
-    },
-    body: JSON.stringify(address),
-  })
-
-  if (!a.ok) {
-    throw Error('Não foi possivel criar o endereço')
-  }
-
   const contact = [
     {
     type: 1,
@@ -168,6 +158,18 @@ export const clientCreate = async (data) => {
       client
     }
   ]
+
+  const a = await fetch('http://localhost:8080/api/address', {
+    method: 'POST',
+    headers: {
+      'Content-type': 'application/json',
+    },
+    body: JSON.stringify(address),
+  })
+
+  if (!a.ok) {
+    throw Error('Não foi possivel criar o endereço')
+  }
 
   contact.map(async (eachCt) => {
     const ct = await fetch('http://localhost:8080/api/contact', {

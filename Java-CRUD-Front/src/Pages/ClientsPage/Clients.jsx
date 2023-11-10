@@ -84,8 +84,10 @@ export const Clients = () => {
     updateStatusClient(client.clientData.id, client)
     const newClients = clients.filter((c) => c.clientData.id !== client.clientData.id)
     const newFilteredClients = filteredClients.filter((c) => c.clientData.id !== client.clientData.id)
+    const newSelectedClients = selectedClients.filter((c) => c !== client.clientData.id)
     setClients(newClients)
     setFilteredClients(newFilteredClients)
+    setSelectedClients(newSelectedClients)
   }
 
   const handleMultipleRemoveClient = () => {
