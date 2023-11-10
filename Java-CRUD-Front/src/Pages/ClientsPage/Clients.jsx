@@ -22,6 +22,7 @@ export const Clients = () => {
 
   // Funcionamento de alertas e dialogos
   const [title, setTitle] = useState("")
+  const [filterValue, setFilterValue] = useState("")
   const [message, setMessage] = useState("")
   const [openAlert, setOpenAlert] = useState(false)
   const [openDialog, setOpenDialog] = useState(false)
@@ -32,6 +33,7 @@ export const Clients = () => {
     const filtered = clients.filter((eachClient)=>{
       return eachClient.clientData.name.toLowerCase().startsWith(value.toLowerCase())
     })
+    setFilterValue(value)
     setFilteredClients(filtered)
   }
 
@@ -161,6 +163,7 @@ export const Clients = () => {
     const newClients = await clientsActiveLoader()
     setClients(newClients)
     setFilteredClients(newClients)
+    setFilterValue("")
     setOpenAlert(true)
   }
   return ( 
@@ -174,6 +177,7 @@ export const Clients = () => {
             <input className="border border-gray-200 w-11/12 px-2 rounded-l-lg text-lg"
             type="text"
             placeholder="Pesquisar"
+            value = {filterValue}
             onChange={(e) => {handleFilter(e.target.value)}}
             />
             <div className="cursor-pointer bg-purple-highlight rounded-r-lg w-1/12 h-full flex items-center justify-center">
