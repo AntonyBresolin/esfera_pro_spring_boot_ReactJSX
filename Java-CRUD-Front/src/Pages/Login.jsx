@@ -1,14 +1,22 @@
-import { useContext, useState } from "react"
-import { AlertPopup } from "../Components/AlertPopup"
-import { AuthContext } from "../Authenticate"
+// React e dependencias
 import { useLocation, useNavigate } from "react-router-dom"
+import { useContext, useState } from "react"
+
+// Contexto global
+import { AuthContext } from "../Authenticate"
+
+// Componentes
+import { AlertPopup } from "../Components/AlertPopup"
 
 
 
 export const Login = () => {
+    // Dados necessários
+    const useAuth = useContext(AuthContext)
     const navigate = useNavigate() 
     const location = useLocation()
-    const useAuth = useContext(AuthContext)
+
+    // Funcionamento do alerta
     const message = "Usuário ou senha incorretos"
     const [open, setOpen] = useState(false)
 

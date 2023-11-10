@@ -1,12 +1,18 @@
+// React e dependencias
 import { Link } from "react-router-dom";
-import { Menu } from "../Layouts/Menu";
-import { AuthContext } from "../Authenticate";
 import { useContext } from "react";
 
+// Contexto global
+import { AuthContext } from "../Authenticate";
+
+import { Menu } from "../Layouts/Menu";
+
 export const NotFound = () => {
+    // Dados necessários
     const location = (window.location.href)
     const data = useContext(AuthContext)
     const User = data.auth.user
+
     return (
         <div className="flex flex-row w-full font-body">
             <Menu/>

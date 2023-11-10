@@ -2,7 +2,7 @@ import { useContext } from "react";
 import { Outlet, ScrollRestoration } from "react-router-dom";
 import { AuthContext } from "../Authenticate";
 
-export const DashBoardLayout = () => {
+export const RootLayout = () => {
     const data = useContext(AuthContext)
     const User = data.auth.user
 
