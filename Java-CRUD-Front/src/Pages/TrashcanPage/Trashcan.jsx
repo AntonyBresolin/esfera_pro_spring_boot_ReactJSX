@@ -1,7 +1,7 @@
 import { useState } from "react";
-import { useLoaderData } from "react-router-dom";
+import { Navigate, useLoaderData } from "react-router-dom";
 
-import { ReloadIcon, TrashIcon } from "@radix-ui/react-icons";
+import { MagnifyingGlassIcon, ReloadIcon, TrashIcon } from "@radix-ui/react-icons";
 
 import { Menu } from "../../Layouts/Menu";
 import { clientDelete, updateStatusClient } from "../../functions/clientsFunctions";
@@ -11,6 +11,7 @@ import { DialogPopup } from "../../Components/DialogPopup";
 export const Trashcan = () => {
     const initialClients = useLoaderData()
     const [Clients, setClients] = useState(initialClients)
+    const [filteredClients, setFilteredClients] = useState(initialClients)
     const [selectedClients, setSelectedClients] = useState([])
     const [title, setTitle] = useState("")
     const [message, setMessage] = useState("")
@@ -18,6 +19,15 @@ export const Trashcan = () => {
     const [openAlert, setOpenAlert] = useState(false)
     const [functions, setFunctions] = useState( () => {})
     const [client, setClient] = useState({})
+
+    //Função de filtrar cliente
+    const handleFilter = (value) => {
+        const filtered = Clients.filter((eachClient)=>{
+          return eachClient.clientData.name.toLowerCase().startsWith(value.toLowerCase())
+        })
+        setFilteredClients(filtered)
+    }
+
 
     //Função de selecionar cliente
     const checkboxHandler = (e) => {
@@ -67,6 +77,7 @@ export const Trashcan = () => {
         updateStatusClient(client.clientData.id, client)
         const newClients = Clients.filter((c) => c.clientData.id !== client.clientData.id)
         setClients(newClients)
+        setFilteredClients(newClients)
     }
 
     const handleMultipleRestoreClient = () => {
@@ -90,6 +101,7 @@ export const Trashcan = () => {
         })
         const newClients = Clients.filter((c) => !selectedClients.includes(c.clientData.id))
         setClients(newClients)
+        setFilteredClients(newClients)
         setSelectedClients([])
     }
 
@@ -105,6 +117,7 @@ export const Trashcan = () => {
     const deleteClient = async (client) => {
         const newClients = await clientDelete(client.id)
         setClients(newClients)
+        setFilteredClients(newClients)
     }
 
     const handleMultipleDeleteClient = () => {
@@ -122,11 +135,12 @@ export const Trashcan = () => {
     }
 
     const multipleDeleteClient = async () => {
-        selectedClients.map(async (id) => {
+        filteredClients.map(async (id) => {
             await clientDelete(id)
         })
-        const newClients = Clients.filter((c) => !selectedClients.includes(c.clientData.id))
+        const newClients = Clients.filter((c) => !filteredClients.includes(c.clientData.id))
         setClients(newClients)
+        setFilteredClients(newClients)
         setSelectedClients([])
     }
 
@@ -134,6 +148,18 @@ export const Trashcan = () => {
         <div className="flex flex-row w-full font-body">
             <Menu />
             <div className="w-full h-full pb-44">
+            <div className="w-full flex justify-evenly mb-3">
+                    <div className="w-2/6 flex items-center justify-center">
+                        <input className="border border-gray-200 w-11/12 px-2 rounded-l-lg text-lg"
+                        type="text"
+                        placeholder="Pesquisar"
+                        onChange={(e) => {handleFilter(e.target.value)}}
+                        />
+                        <div className="cursor-pointer bg-purple-highlight rounded-r-lg w-1/12 h-full flex items-center justify-center">
+                            <MagnifyingGlassIcon/>
+                        </div>
+                    </div>
+                </div>
                 <div className="border-y grid grid-cols-12  items-center p-3 pl-6 bg-gray-100 text-gray-600">
                     <div className="flex items-center gap-8 text-lg col-span-1">
                         <input type="checkbox" onClick={checkAllHandler} className="w-4 h-4"/>
@@ -159,8 +185,8 @@ export const Trashcan = () => {
                         </div>                            
                     </div>
                 </div>
-                {Clients.map((eachClient, index) => (
-                    <div onClick={() => {handleDetailsClient(eachClient)}} key={index} className="border-y grid grid-cols-12 items-center p-3 pl-6">
+                {filteredClients.length === 0 ? <Navigate to="/trashcan" /> : filteredClients.map((eachClient, index) => (
+                    <div onClick={() => {handleDetailsClient(eachClient)}} key={index} className="border-y grid grid-cols-12 items-center p-3 pl-6 hover:bg-gray-100/50">
                         <label onClick={(e) => e.stopPropagation()} className="flex items-center text-lg col-span-1">
                             <input type="checkbox" checked={ selectedClients.includes( eachClient.clientData.id ) } value={eachClient.clientData.id} onChange={checkboxHandler} className="w-4 h-4"/>
                         </label>

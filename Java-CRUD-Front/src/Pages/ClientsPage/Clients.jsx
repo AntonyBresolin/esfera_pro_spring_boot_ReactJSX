@@ -1,7 +1,7 @@
 import { useState } from "react";
-import { useLoaderData } from "react-router-dom";
+import { Navigate, useLoaderData } from "react-router-dom";
 
-import { Pencil1Icon, PlusIcon, TrashIcon } from "@radix-ui/react-icons";
+import { MagnifyingGlassIcon, Pencil1Icon, PlusIcon, TrashIcon } from "@radix-ui/react-icons";
 
 import { clientCreate, clientUpdate, clientsActiveLoader, updateStatusClient } from "../../functions/clientsFunctions";
 import { DialogPopup } from "../../Components/DialogPopup";
@@ -12,6 +12,7 @@ import { Menu }  from "../../Layouts/Menu";
 export const Clients = () => {
     const initialClients = useLoaderData()
     const [Clients, setClients] = useState(initialClients)
+    const [filteredClients, setFilteredClients] = useState(initialClients)
     const [selectedClients, setSelectedClients] = useState([])
     const [functions, setFunctions] = useState( () => {})
     const [openAlert, setOpenAlert] = useState(false)
@@ -19,6 +20,14 @@ export const Clients = () => {
     const [message, setMessage] = useState("")
     const [client, setClient] = useState({})
     const [title, setTitle] = useState("")
+
+    //Função de filtrar cliente
+    const handleFilter = (value) => {
+      const filtered = Clients.filter((eachClient)=>{
+        return eachClient.clientData.name.toLowerCase().startsWith(value.toLowerCase())
+      })
+      setFilteredClients(filtered)
+    }
 
     //Função de selecionar cliente
     const checkboxHandler = (e) => {
@@ -37,10 +46,10 @@ export const Clients = () => {
     }
   
     const checkAllHandler = () => {
-      if( Clients.length === selectedClients.length ){
+      if( filteredClients.length === selectedClients.length ){
         setSelectedClients( [] )
       }else{
-        const selectedIds = Clients.map((eachClient)=>{
+        const selectedIds = filteredClients.map((eachClient)=>{
           return eachClient.clientData.id
         })
         setSelectedClients( selectedIds )
@@ -69,6 +78,7 @@ export const Clients = () => {
       updateStatusClient(client.clientData.id, client)
       const newClients = Clients.filter((c) => c.clientData.id !== client.clientData.id)
       setClients(newClients)
+      setFilteredClients(newClients)
     }
 
     const handleMultipleRemoveClient = () => {
@@ -78,7 +88,7 @@ export const Clients = () => {
         setTitle("error")
         setOpenAlert(true)
     } else {
-        setMessage(`Você esta prestes a restaurar ${selectedClients.length} clientes.`)
+        setMessage(`Você esta prestes a remover ${selectedClients.length} clientes.`)
         setFunctions(() => multipleRemoveClient)
         setTitle("confirmation")
         setOpenAlert(true)
@@ -92,6 +102,7 @@ export const Clients = () => {
       })
       const newClients = Clients.filter((c) => !selectedClients.includes(c.clientData.id))
       setClients(newClients)
+      setFilteredClients(newClients)
       setSelectedClients([])
     }
 
@@ -108,6 +119,7 @@ export const Clients = () => {
       const data = Object.fromEntries(new FormData(e.target))
       const res = await clientUpdate(data, client)
       setClients(res)
+      setFilteredClients(res)
       setMessage(`Cliente ${data.name} editado com sucesso!`)
       setFunctions(() => () => {setOpenAlert(false)})
       setTitle("success")
@@ -125,17 +137,30 @@ export const Clients = () => {
     const handleSubmitCreate = async (e) => {
       let data = Object.fromEntries(new FormData(e.target))
       const res = await clientCreate(data)
-      setClients(clientsActiveLoader())
       setMessage(`Cliente ${data.name} criado com sucesso!`)
       setFunctions(() => () => {setOpenAlert(false)})
       setTitle("success")
+      const newClients = await clientsActiveLoader()
+      setClients(newClients)
+      setFilteredClients(newClients)
       setOpenAlert(true)
     }
-
     return ( 
       <div className="flex flex-row w-full font-body">
         <Menu />
         <div className="w-full h-full pb-44">
+          <div className="w-full flex justify-evenly mb-3">
+            <div className="w-2/6 flex items-center justify-center">
+              <input className="border border-gray-200 w-11/12 px-2 rounded-l-lg text-lg"
+              type="text"
+              placeholder="Pesquisar"
+              onChange={(e) => {handleFilter(e.target.value)}}
+              />
+              <div className="cursor-pointer bg-purple-highlight rounded-r-lg w-1/12 h-full flex items-center justify-center">
+                <MagnifyingGlassIcon/>
+              </div>
+            </div>
+          </div>
           <div className="border-y grid grid-cols-12  items-center p-3 pl-6 bg-gray-100 text-gray-600">
             <div className="flex items-center gap-8 text-lg col-span-1">
               <input type="checkbox" onClick={checkAllHandler} className="w-4 h-4"/>
@@ -156,8 +181,8 @@ export const Clients = () => {
                   <TrashIcon className="h-4 w-4 block" />
             </div>
           </div>
-          {Clients.map((eachClient, index) => (
-            <div onClick={() => {handleDetailsClient(eachClient)}} key={index} className="border-y grid grid-cols-12 items-center p-3 pl-6">
+          {filteredClients.length === 0 ? <Navigate to="/" /> : filteredClients.map((eachClient, index) => (
+            <div onClick={() => {handleDetailsClient(eachClient)}} key={index} className="border-y grid grid-cols-12 items-center p-3 pl-6 hover:bg-gray-100/50">
               <label onClick={(e) => e.stopPropagation()} className="flex items-center text-lg col-span-1">
                 <input type="checkbox" checked={ selectedClients.includes( eachClient.clientData.id ) } value={eachClient.clientData.id} onChange={checkboxHandler} className="w-4 h-4"/>
               </label>
