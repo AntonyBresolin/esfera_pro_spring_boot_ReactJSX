@@ -8,16 +8,16 @@ export const clientsActiveLoader = async () => {
   }
   const data = await res.json()
   let clients = []
-  data.map( (eachClient) => {
-    let cell = eachClient.contacts.filter((contact) => contact.type == 1)
-    let email = eachClient.contacts.filter((contact) => contact.type == 2)
+  data.map((eachClient) => {
+    let cell = eachClient.contacts.filter((contact) => contact.type === 1)
+    let email = eachClient.contacts.filter((contact) => contact.type === 2)
     let clientData = {
       id: eachClient.client.id,
       name: eachClient.client.name,
       cnpj: eachClient.client.cnpj,
       status: eachClient.client.status
     }
-    let contactData = {
+    let contactData =  {
         idCell: cell[0].id,
         cell: cell[0].contentContact,
         idEmail: email[0].id,
@@ -160,7 +160,6 @@ export const clientCreate = async (data) => {
   })
 
   return true
-
 }
 
 export const clientUpdate = async (data, originData) => {
@@ -221,6 +220,7 @@ export const clientUpdate = async (data, originData) => {
 
 
 export const updateStatusClient = async (id, client) => {
+  console.log(client)
 const upd = await fetch(`http://localhost:8080/api/client/${id}/status/${client.clientData.status === "Active" ? "inactive" : "active"}`, {
   method: 'PUT',
   headers: {
