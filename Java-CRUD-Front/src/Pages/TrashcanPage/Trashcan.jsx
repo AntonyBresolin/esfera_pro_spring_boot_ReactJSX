@@ -53,10 +53,10 @@ export const Trashcan = () => {
       }
     
     const checkAllHandler = () => {
-        if( clients.length === selectedClients.length ){
+        if( filteredClients.length === selectedClients.length ){
           setSelectedClients( [] )
         }else{
-          const selectedIds = clients.map((eachClient)=>{
+          const selectedIds = filteredClients.map((eachClient)=>{
             return eachClient.clientData.id
           })
           setSelectedClients( selectedIds )
