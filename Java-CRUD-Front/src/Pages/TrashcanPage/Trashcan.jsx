@@ -173,7 +173,7 @@ export const Trashcan = () => {
                         placeholder="Pesquisar"
                         onChange={(e) => {handleFilter(e.target.value)}}
                         />
-                        <div className="cursor-pointer bg-purple-highlight rounded-r-lg w-1/12 h-full flex items-center justify-center">
+                        <div className="cursor-pointer bg-purple-highlight rounded-r-lg w-1/12 h-full flex items-center justify-center text-white hover:scale-110 transition-all duration-500 hover:text-amber">
                             <MagnifyingGlassIcon/>
                         </div>
                     </div>
