@@ -34,13 +34,17 @@
 1. Na pasta do front end, instale as dependências:
 - npm install
 2. Após as instalações, rode o `main` do back end na classe `ApiSpringBootEsferaApplication`.
-3. Utilize de algum programa para post em API como a extensão Thunder Client ou o app Postman para criar o seu login com o formato
+3. Utilize de algum programa para post em API como a extensão Thunder Client ou o app Postman para criar o seu login com o formato JSON
 ```
 {
     "username": "seu nome para fazer login",
     "name": "seu nome dentro do programa",
     "password": "sua senha"
 }
+```
+Inserir o JSON no body do protocolo POST, na rota:
+```
+    http://localhost:8080/api/user
 ```
 4. Na pasta do front end, rode o comando:
 - npm run dev
