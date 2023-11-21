@@ -1,4 +1,4 @@
-# esfera_pro_spring_boot_ReactJSX
+# Esfera Pró: Sistema de Gerenciamento de Clientes com SpringBoot e React
 
 ## Desenvolvimento do projeto esfera pró soluções.
 
@@ -6,8 +6,8 @@
 - JavaScript
 - Spring Boot Java Web
 - MySQL
-- React Native
-- Java 20
+- React Js + Vite
+- Java 17
 
 ---
 
