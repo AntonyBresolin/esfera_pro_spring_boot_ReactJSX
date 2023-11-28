@@ -106,12 +106,27 @@ function ClientsFields ({client}) {
           />
         </div>
         <div className="w-full">
-          <label className="text-gray-900 font-medium">CPF/CNPJ</label>
+          <label className="text-gray-900 font-medium">CPF</label>
           <input
           className="text-gray-600 mt-2 py-1.5 px-2 block w-11/12 rounded-md border border-gray-300 shadow focus:border-purple-contrast focus:text-gray-800"
-          type="number"
+          type="text"
           defaultValue={client.clientData.cnpj}
           name="cnpj"
+          onChange={(e) => {
+            if (isNaN(e.target.value.charAt(e.target.value.length - 1))){
+              e.target.value = e.target.value.slice(0, e.target.value.length - 1)
+            }
+            if (e.target.value.length === 3) {
+              e.target.value += '.'
+            } else if (e.target.value.length === 7) {
+              e.target.value += '.'
+            } else if (e.target.value.length === 11) {
+              e.target.value += '-'
+            }
+            if (e.target.value.length > 14) {
+              e.target.value = e.target.value.slice(0, 14)
+            }
+          }}
           required
           />
         </div>
@@ -123,9 +138,24 @@ function ClientsFields ({client}) {
           <label className="text-gray-900 font-medium">Celular</label>
           <input
           className="text-gray-600 mt-2 py-1.5 px-2 block w-11/12 rounded-md border border-gray-300 shadow focus:border-purple-contrast focus:text-gray-800"
-          type="number"
+          type="text"
           defaultValue={client.contactData.cell}
           name="cell"
+          onChange={(e) => {
+            if (isNaN(e.target.value.charAt(e.target.value.length - 1))){
+              e.target.value = e.target.value.slice(0, e.target.value.length - 1)
+            }
+            if (e.target.value.length === 1) {
+              e.target.value = '(' + e.target.value
+            } else if (e.target.value.length === 3) {
+              e.target.value += ') '
+            } else if (e.target.value.length === 10) {
+              e.target.value += '-'
+            }
+            if (e.target.value.length > 15) {
+              e.target.value = e.target.value.slice(0, 15)
+            }
+          }}
           required
           />
         </div>
@@ -148,9 +178,20 @@ function ClientsFields ({client}) {
             <label className="text-gray-900 font-medium">CEP</label>
             <input
             className="w-5/6 text-gray-600 mt-2 py-1.5 px-2 block rounded-md border border-gray-300 shadow focus:border-purple-contrast focus:text-gray-800"
-            type="number"
+            type="text"
             defaultValue={client.addressData.cep}
             name="cep"
+            onChange={(e) => {
+              if (isNaN(e.target.value.charAt(e.target.value.length - 1))){
+                e.target.value = e.target.value.slice(0, e.target.value.length - 1)
+              }
+              if (e.target.value.length === 5) {
+                e.target.value += '-'
+              }
+              if (e.target.value.length > 9) {
+                e.target.value = e.target.value.slice(0, 9)
+              }
+            }}
             required
             />
           </div>
@@ -227,9 +268,17 @@ function ClientsFields ({client}) {
             <label className="text-gray-900 font-medium">Número</label>
             <input
             className="w-5/6 text-gray-600 mt-2 py-1.5 px-2 block rounded-md border border-gray-300 shadow focus:border-purple-contrast focus:text-gray-800"
-            type="number"
+            type="text"
             defaultValue={client.addressData.number}
             name="number"
+            onChange={(e) => {
+              if (isNaN(e.target.value.charAt(e.target.value.length - 1))){
+                e.target.value = e.target.value.slice(0, e.target.value.length - 1)
+              }
+              if (e.target.value.length > 6) {
+                e.target.value = e.target.value.slice(0, 6)
+              }
+            }}
             required
             />
           </div>

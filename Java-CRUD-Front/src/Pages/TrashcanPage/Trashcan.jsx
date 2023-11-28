@@ -194,7 +194,7 @@ export const Trashcan = () => {
                         Contato
                     </div>
                     <div className="col-span-2">
-                        CPF/CNPJ
+                        CPF
                     </div>
                     <div className="flex justify-evenly">
                         <div title="Restaurar clientes selecionados" onClick={handleMultipleRestoreClient} className="rounded-full bg-gray-200 p-2 cursor-pointer hover:text-amber hover:bg-purple-contrast hover:scale-110 transition ease-in-out duration-200" >
