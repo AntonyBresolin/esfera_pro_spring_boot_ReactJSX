@@ -208,7 +208,7 @@ export const Trashcan = () => {
 
                 {/* Tabela de clientes */}
                 {filteredClients.length === 0 ? <Navigate to="/trashcan" /> : filteredClients.map((eachClient, index) => (
-                    <div onClick={() => {handleDetailsClient(eachClient)}} key={index} className="border-y grid grid-cols-12 items-center p-3 pl-6 hover:bg-gray-100/50">
+                    <div onClick={() => {handleDetailsClient(eachClient)}} key={index} className="border-y grid grid-cols-12 items-center p-3 pl-6 hover:bg-gray-100/50 border-l-2 border-gray-100">
                         <label onClick={(e) => e.stopPropagation()} className="flex items-center text-lg col-span-1">
                             <input type="checkbox" checked={ selectedClients.includes( eachClient.clientData.id ) } value={eachClient.clientData.id} onChange={checkboxHandler} className="w-4 h-4"/>
                         </label>
