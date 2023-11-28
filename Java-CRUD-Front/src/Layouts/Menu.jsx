@@ -20,7 +20,7 @@ export const Menu = () => {
 
 
     return ( 
-        <aside className={`flex flex-col border-r-2 justify-between z-10 ${openMenu? "w-36" : "w-16"}`}>
+        <aside className={`flex flex-col justify-between z-10 ${openMenu? "w-36" : "w-16"}`}>
 
             {/* Parte superior do menu, opções no geral */}
             <div className="flex flex-col text-purple-contrast max-w-min p-2 gap-2 fixed top-0">

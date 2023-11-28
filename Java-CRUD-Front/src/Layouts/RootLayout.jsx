@@ -41,7 +41,7 @@ export const RootLayout = () => {
             <ScrollRestoration />
             {/* Cabeçalho */}
             <header ref={headerRef} className="flex justify-end m-2">
-                <div className="flex flex-row cursor-pointer select-none"
+                <div className="flex flex-row cursor-pointer select-none z-10"
                     onClick={() => handdleClick()}>
                     <div className=" font-body text-center ">
                         <h4 className="font-semibold">{User !== '' ? User : "Usuário"}</h4>
