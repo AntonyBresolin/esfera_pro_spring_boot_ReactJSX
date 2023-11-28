@@ -75,7 +75,7 @@ export const ClientsError = () => {
                         Contato
                     </div>
                     <div className="col-span-2">
-                        CPF/CNPJ
+                        CPF
                     </div>
                 </div>
 

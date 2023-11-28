@@ -43,7 +43,7 @@ export const TrashcanError = () => {
                         Contato
                     </div>
                     <div className="col-span-2">
-                        CPF/CNPJ
+                        CPF
                     </div>
                 </div>
 

@@ -201,7 +201,7 @@ export const Clients = () => {
             Contato
           </div>
           <div className="col-span-2">
-            CPF/CNPJ
+            CPF
           </div>
           <div title="Remover clientes selecionados" onClick={handleMultipleRemoveClient} className="flex rounded-full bg-gray-200 p-2 cursor-pointer item-center justify-center hover:text-amber hover:bg-purple-contrast hover:scale-110 transition ease-in-out duration-200" >
                 <TrashIcon className="h-4 w-4 block" />
