@@ -54,14 +54,36 @@ export const Clients = () => {
   }
 
   const checkAllHandler = () => {
-    if( filteredClients.length === selectedClients.length ){
-      setSelectedClients( [] )
-    }else{
-      const selectedIds = filteredClients.map((eachClient)=>{
-        return eachClient.clientData.id
+    const selectedIds = filteredClients.map((eachClient)=>{
+        if (selectedClients.includes(eachClient.clientData.id)){
+            return null
+        } else {
+            return eachClient.clientData.id
+        }
+      }).filter((id)=> id !== null)
+      let allSelected = 0
+      selectedIds.map((id)=>{
+        if (selectedClients.includes(id)){
+          allSelected += 1
+        } else {
+          allSelected = 0
+        }
       })
-      setSelectedClients( selectedIds )
+    if( allSelected === selectedIds.length ){
+      const removedIds = filteredClients.map((eachClient)=>{
+          return eachClient.clientData.id
+      })
+      setSelectedClients( selectedClients.filter((id)=> !removedIds.includes(id)) )
+    }else{
+      setSelectedClients( [...selectedClients, ...selectedIds] )
     }
+  }
+
+  const checkedHandler = () => {
+    const allchecked = filteredClients.map((eachClient)=>{
+      return eachClient.clientData.id
+    })
+  return allchecked.every((id)=> selectedClients.includes(id)) && selectedClients.length !== 0 ? true : false
   }
 
   // Função de detalhes do cliente
@@ -189,7 +211,7 @@ export const Clients = () => {
         {/* Header da tabela de clientes */}
         <div className="border-y grid grid-cols-12  items-center p-3 pl-6 bg-gray-100 text-gray-600">
           <div className="flex items-center gap-8 text-lg col-span-1">
-            <input type="checkbox" onClick={checkAllHandler} className="w-4 h-4"/>
+            <input type="checkbox" onChange={checkAllHandler} checked={checkedHandler()} className="w-4 h-4"/>
           </div>
           <div className="flex items-center text-lg col-span-3">
               Nome
